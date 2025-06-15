@@ -5,7 +5,7 @@ const PrelimsHero = () => {
     <div
       className="flex w-full flex-col rounded-[20px] bg-cover px-[30px] py-[30px] md:px-[64px] md:py-[56px]"
       style={{ 
-        background: 'linear-gradient(135deg, #4318FF 0%, #6366F1 50%, #8B5CF6 100%)'
+        background: 'linear-gradient(135deg, #4318FF 0%, #6366F1 100%)'
       }}
     >
       <div className="w-full">
@@ -18,7 +18,7 @@ const PrelimsHero = () => {
 
         <div className="mt-[36px] flex items-center justify-between gap-4 sm:justify-start 2xl:gap-10">
           <button className="text-black linear rounded-xl bg-white px-4 py-2 text-center text-base font-medium transition duration-200 hover:!bg-white/80 active:!bg-white/70">
-            Start Preparation
+            Preparation Guide
           </button>
           <button className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2">
             View Syllabus

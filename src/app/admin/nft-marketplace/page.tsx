@@ -1,19 +1,6 @@
 'use client';
 import PrelimsHero from 'components/admin/prelims/PrelimsHero';
 import ToolkitCard from 'components/admin/prelims/ToolkitCard';
-import { 
-  MdQuiz, 
-  MdAssignment, 
-  MdTrendingUp, 
-  MdPsychology,
-  MdLibraryBooks,
-  MdAnalytics,
-  MdSmartToy,
-  MdFlashOn
-} from 'react-icons/md';
-import { 
-  FiBookOpen
-} from 'react-icons/fi';
 
 const PrelimsPage = () => {
   const toolkits = [
@@ -21,64 +8,56 @@ const PrelimsPage = () => {
       id: 1,
       title: 'Previous Year Questions',
       description: 'Comprehensive collection of UPSC Prelims PYQs from 1979-2024',
-      icon: <MdLibraryBooks className="h-8 w-8" />,
-      color: 'from-blue-500 to-blue-600',
+      image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=500',
       link: '/admin/pyqs'
     },
     {
       id: 2,
       title: 'MCQ Practice',
       description: 'Daily practice with curated multiple choice questions',
-      icon: <MdQuiz className="h-8 w-8" />,
-      color: 'from-green-500 to-green-600',
+      image: 'https://images.pexels.com/photos/301926/pexels-photo-301926.jpeg?auto=compress&cs=tinysrgb&w=500',
       link: '/admin/mcq-practice'
     },
     {
       id: 3,
       title: 'Test Series',
       description: 'Full-length mock tests simulating actual UPSC Prelims',
-      icon: <MdAssignment className="h-8 w-8" />,
-      color: 'from-purple-500 to-purple-600',
+      image: 'https://images.pexels.com/photos/6238297/pexels-photo-6238297.jpeg?auto=compress&cs=tinysrgb&w=500',
       link: '/admin/test-series'
     },
     {
       id: 4,
       title: 'Smart Flashcards',
       description: 'AI-powered flashcards for quick revision and memory retention',
-      icon: <MdFlashOn className="h-8 w-8" />,
-      color: 'from-yellow-500 to-orange-500',
+      image: 'https://images.pexels.com/photos/6238302/pexels-photo-6238302.jpeg?auto=compress&cs=tinysrgb&w=500',
       link: '/admin/flashcards'
     },
     {
       id: 5,
       title: 'Study Notes',
       description: 'Comprehensive notes covering entire UPSC Prelims syllabus',
-      icon: <FiBookOpen className="h-8 w-8" />,
-      color: 'from-indigo-500 to-indigo-600',
+      image: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=500',
       link: '/admin/notes'
     },
     {
       id: 6,
       title: 'MCQ Decoder',
       description: 'Advanced analysis tool to decode MCQ patterns and strategies',
-      icon: <MdPsychology className="h-8 w-8" />,
-      color: 'from-pink-500 to-rose-500',
+      image: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=500',
       link: '/admin/mcq-decoder'
     },
     {
       id: 7,
       title: 'Trends Analysis',
       description: 'Data-driven insights on UPSC question trends and patterns',
-      icon: <MdAnalytics className="h-8 w-8" />,
-      color: 'from-teal-500 to-cyan-500',
+      image: 'https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg?auto=compress&cs=tinysrgb&w=500',
       link: '/admin/trends'
     },
     {
       id: 8,
       title: 'AI Mentor',
       description: 'Personalized AI guidance for your UPSC preparation journey',
-      icon: <MdSmartToy className="h-8 w-8" />,
-      color: 'from-violet-500 to-purple-500',
+      image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=500',
       link: '/admin/ai-mentor'
     }
   ];
@@ -98,14 +77,13 @@ const PrelimsPage = () => {
       </div>
 
       {/* Toolkit Cards */}
-      <div className="z-20 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="z-20 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {toolkits.map((toolkit) => (
           <ToolkitCard
             key={toolkit.id}
             title={toolkit.title}
             description={toolkit.description}
-            icon={toolkit.icon}
-            color={toolkit.color}
+            image={toolkit.image}
             link={toolkit.link}
           />
         ))}
