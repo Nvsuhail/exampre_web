@@ -11,8 +11,8 @@ interface ToolkitCardProps {
 
 const ToolkitCard = ({ title, description, image, link }: ToolkitCardProps) => {
   const handleNavigation = () => {
-    console.log(`Navigating to: ${link}`);
-    alert(`Would navigate to: ${link}`);
+    // Navigate to the actual link instead of showing alert
+    window.location.href = link;
   };
 
   return (
