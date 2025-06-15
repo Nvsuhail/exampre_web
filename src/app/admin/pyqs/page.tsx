@@ -435,7 +435,7 @@ const PYQsPage = () => {
       <div className="min-h-screen flex flex-col">
         {/* Quiz Header - Completely rounded like bottom quiz box */}
         <div className="m-4 mb-0">
-          <Card extra="p-4 border-b-0 rounded-b-none">
+          <Card extra="p-4 rounded-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <button
@@ -469,7 +469,7 @@ const PYQsPage = () => {
         {/* Quiz Content - Scrollable */}
         <div className="flex-1 px-4 pb-4 overflow-y-auto">
           <div className="max-w-4xl mx-auto">
-            <Card extra="p-8 rounded-t-none">
+            <Card extra="p-8 rounded-xl">
               {/* Question Header */}
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex items-center gap-2">
@@ -720,20 +720,23 @@ const PYQsPage = () => {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                 Year Range
               </label>
-              <div className="bg-gray-50 dark:bg-navy-800 p-6 rounded-xl">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">From {yearRange.from} to {yearRange.to}</span>
-                  <span className="text-xs bg-brand-100 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 px-3 py-1 rounded-full font-medium">
+              <div className="bg-white dark:bg-navy-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    From {yearRange.from} to {yearRange.to}
+                  </span>
+                  <span className="text-xs bg-brand-100 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 px-3 py-1.5 rounded-full font-medium">
                     {yearRange.to - yearRange.from + 1} years
                   </span>
                 </div>
                 
-                {/* Dual Range Slider */}
-                <div className="relative mb-6">
-                  <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                {/* Dual Range Slider Container */}
+                <div className="relative mb-8">
+                  {/* Background track */}
+                  <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full">
                     {/* Active range track */}
                     <div 
-                      className="absolute h-2 bg-brand-500 rounded-full"
+                      className="absolute h-3 bg-gradient-to-r from-brand-500 to-brand-600 rounded-full shadow-sm"
                       style={{
                         left: `${((yearRange.from - 2000) / (2024 - 2000)) * 100}%`,
                         width: `${((yearRange.to - yearRange.from) / (2024 - 2000)) * 100}%`
@@ -753,8 +756,11 @@ const PYQsPage = () => {
                         setYearRange(prev => ({ ...prev, from: newFrom }));
                       }
                     }}
-                    className="absolute top-0 w-full h-2 bg-transparent appearance-none cursor-pointer slider pointer-events-none"
-                    style={{ pointerEvents: 'auto' }}
+                    className="absolute top-0 w-full h-3 bg-transparent appearance-none cursor-pointer range-slider"
+                    style={{ 
+                      pointerEvents: 'auto',
+                      zIndex: 2
+                    }}
                   />
                   
                   {/* To slider */}
@@ -769,15 +775,18 @@ const PYQsPage = () => {
                         setYearRange(prev => ({ ...prev, to: newTo }));
                       }
                     }}
-                    className="absolute top-0 w-full h-2 bg-transparent appearance-none cursor-pointer slider pointer-events-none"
-                    style={{ pointerEvents: 'auto' }}
+                    className="absolute top-0 w-full h-3 bg-transparent appearance-none cursor-pointer range-slider"
+                    style={{ 
+                      pointerEvents: 'auto',
+                      zIndex: 1
+                    }}
                   />
                 </div>
                 
                 {/* Year inputs */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-2 gap-4 mb-6">
                   <div>
-                    <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">From Year</label>
+                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">From Year</label>
                     <div className="relative">
                       <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <input
@@ -791,12 +800,12 @@ const PYQsPage = () => {
                             setYearRange(prev => ({ ...prev, from: newFrom }));
                           }
                         }}
-                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-navy-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-navy-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">To Year</label>
+                    <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">To Year</label>
                     <div className="relative">
                       <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                       <input
@@ -810,7 +819,7 @@ const PYQsPage = () => {
                             setYearRange(prev => ({ ...prev, to: newTo }));
                           }
                         }}
-                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-navy-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                        className="w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-navy-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors"
                       />
                     </div>
                   </div>
@@ -820,19 +829,19 @@ const PYQsPage = () => {
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => setYearRange({ from: 2020, to: 2024 })}
-                    className="text-xs px-3 py-2 bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors font-medium"
+                    className="text-xs px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors font-medium border border-blue-200 dark:border-blue-800"
                   >
                     Last 5 years
                   </button>
                   <button
                     onClick={() => setYearRange({ from: 2015, to: 2024 })}
-                    className="text-xs px-3 py-2 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/40 transition-colors font-medium"
+                    className="text-xs px-4 py-2 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors font-medium border border-green-200 dark:border-green-800"
                   >
                     Last 10 years
                   </button>
                   <button
                     onClick={() => setYearRange({ from: 2000, to: 2024 })}
-                    className="text-xs px-3 py-2 bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/40 transition-colors font-medium"
+                    className="text-xs px-4 py-2 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/40 transition-colors font-medium border border-purple-200 dark:border-purple-800"
                   >
                     All years
                   </button>
