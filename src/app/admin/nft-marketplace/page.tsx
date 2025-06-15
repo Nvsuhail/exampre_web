@@ -8,18 +8,18 @@ import {
   MdPsychology,
   MdAnalytics,
   MdSmartToy,
-  MdFlashOn
+  MdFlashOn,
+  MdBarChart
 } from 'react-icons/md';
 import { 
   FiBookOpen, 
   FiTarget, 
   FiTrendingUp, 
   FiClock,
-  FiBrain,
   FiAward,
-  FiUsers,
-  FiBarChart3
+  FiUsers
 } from 'react-icons/fi';
+import { FaBrain } from 'react-icons/fa';
 import ToolkitCard from 'components/admin/prelims/ToolkitCard';
 
 const PrelimsPage = () => {
@@ -108,7 +108,7 @@ const PrelimsPage = () => {
       id: 9,
       title: 'Performance Analytics',
       description: 'Detailed performance tracking and improvement suggestions',
-      icon: <FiBarChart3 className="h-8 w-8" />,
+      icon: <MdBarChart className="h-8 w-8" />,
       color: 'from-cyan-500 to-cyan-600',
       stats: 'Real-time',
       features: ['Strength analysis', 'Weakness identification', 'Progress tracking'],
@@ -151,7 +151,7 @@ const PrelimsPage = () => {
       <div className="flex flex-col justify-between px-4 md:flex-row md:items-center">
         <div>
           <h4 className="text-2xl font-bold text-navy-700 dark:text-white flex items-center gap-3">
-            <FiBrain className="h-8 w-8 text-brand-500" />
+            <FaBrain className="h-8 w-8 text-brand-500" />
             UPSC Prelims Toolkit
           </h4>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
