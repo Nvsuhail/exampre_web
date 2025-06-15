@@ -433,13 +433,13 @@ const PYQsPage = () => {
   if (quizMode && currentQuestion) {
     return (
       <div className="min-h-screen flex flex-col">
-        {/* Quiz Header - Fixed */}
-        <div className="bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-gray-700 p-4 flex-shrink-0">
+        {/* Quiz Header - Fixed with rounded corners */}
+        <div className="bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-gray-700 p-4 flex-shrink-0 rounded-t-xl mx-2 mt-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button
                 onClick={exitQuiz}
-                className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-brand-500 transition-colors"
+                className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-brand-500 transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <FiArrowLeft className="h-4 w-4" />
                 Exit Quiz
@@ -454,7 +454,7 @@ const PYQsPage = () => {
             </div>
             
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg">
+              <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-xl">
                 <MdTimer className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 <span className="font-mono text-blue-600 dark:text-blue-400 font-medium">
                   {formatTime(quizState.timeElapsed)}
@@ -712,36 +712,80 @@ const PYQsPage = () => {
             </div>
           )}
 
-          {/* Year Range */}
+          {/* Improved Year Range */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               Year Range
             </label>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <FiCalendar className="h-4 w-4 text-gray-400" />
-                <span className="text-sm text-gray-600 dark:text-gray-400">From:</span>
-                <select
-                  value={yearRange.from}
-                  onChange={(e) => setYearRange(prev => ({ ...prev, from: parseInt(e.target.value) }))}
-                  className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-navy-800 text-navy-700 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                >
-                  {Array.from({ length: 25 }, (_, i) => 2000 + i).map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
+            <div className="bg-gray-50 dark:bg-navy-800 p-4 rounded-xl">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-sm text-gray-600 dark:text-gray-400">From {yearRange.from} to {yearRange.to}</span>
+                <span className="text-xs bg-brand-100 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 px-2 py-1 rounded-full">
+                  {yearRange.to - yearRange.from + 1} years
+                </span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600 dark:text-gray-400">To:</span>
-                <select
-                  value={yearRange.to}
-                  onChange={(e) => setYearRange(prev => ({ ...prev, to: parseInt(e.target.value) }))}
-                  className="px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-navy-800 text-navy-700 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                >
-                  {Array.from({ length: 25 }, (_, i) => 2000 + i).map(year => (
-                    <option key={year} value={year}>{year}</option>
-                  ))}
-                </select>
+              
+              {/* Year Range Slider */}
+              <div className="relative">
+                <div className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <input
+                      type="range"
+                      min="2000"
+                      max="2024"
+                      value={yearRange.from}
+                      onChange={(e) => {
+                        const newFrom = parseInt(e.target.value);
+                        if (newFrom <= yearRange.to) {
+                          setYearRange(prev => ({ ...prev, from: newFrom }));
+                        }
+                      }}
+                      className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
+                    />
+                    <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      <span>2000</span>
+                      <span>2024</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4 mt-4">
+                  <div className="flex items-center gap-2">
+                    <FiCalendar className="h-4 w-4 text-gray-400" />
+                    <span className="text-sm text-gray-600 dark:text-gray-400">From:</span>
+                    <div className="bg-white dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 min-w-[80px] text-center">
+                      <span className="text-sm font-medium text-navy-700 dark:text-white">{yearRange.from}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">To:</span>
+                    <div className="bg-white dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 min-w-[80px] text-center">
+                      <span className="text-sm font-medium text-navy-700 dark:text-white">{yearRange.to}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Quick Year Presets */}
+                <div className="flex gap-2 mt-3">
+                  <button
+                    onClick={() => setYearRange({ from: 2020, to: 2024 })}
+                    className="text-xs px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors"
+                  >
+                    Last 5 years
+                  </button>
+                  <button
+                    onClick={() => setYearRange({ from: 2015, to: 2024 })}
+                    className="text-xs px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-full hover:bg-green-200 dark:hover:bg-green-900/40 transition-colors"
+                  >
+                    Last 10 years
+                  </button>
+                  <button
+                    onClick={() => setYearRange({ from: 2000, to: 2024 })}
+                    className="text-xs px-3 py-1 bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-full hover:bg-purple-200 dark:hover:bg-purple-900/40 transition-colors"
+                  >
+                    All years
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -778,6 +822,23 @@ const PYQsPage = () => {
           </div>
         </div>
       </Card>
+
+      {/* Search Another Topic Button - Only shown when quiz results exist */}
+      {searchResults.length > 0 && !quizMode && (
+        <div className="text-center">
+          <button
+            onClick={() => {
+              setSearchResults([]);
+              setSelectedSubject('');
+              setSelectedSubtopics([]);
+            }}
+            className="inline-flex items-center gap-2 text-brand-500 hover:text-brand-600 font-medium text-sm px-4 py-2 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
+          >
+            <FiSearch className="h-4 w-4" />
+            Search Another Topic
+          </button>
+        </div>
+      )}
 
       {/* Search Results */}
       {searchResults.length > 0 && !quizMode && (
