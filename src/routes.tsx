@@ -14,6 +14,7 @@ import {
   MdSchedule,
   MdSettings,
   MdTrackChanges,
+  MdChat,
 } from 'react-icons/md';
 import { FiTarget, FiBookOpen, FiUsers, FiCalendar } from 'react-icons/fi';
 
@@ -42,6 +43,12 @@ const routes = [
     layout: '/admin',
     path: 'syllabus-tracker',
     icon: <MdTrackChanges className="h-6 w-6" />,
+  },
+  {
+    name: 'AI Mentor',
+    layout: '/admin',
+    path: 'ai-mentor',
+    icon: <MdChat className="h-6 w-6" />,
   },
   {
     name: 'Current Affairs',
