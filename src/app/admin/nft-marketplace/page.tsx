@@ -20,24 +20,24 @@ const PrelimsPage = () => {
     },
     {
       id: 3,
+      title: 'YouTube Practice',
+      description: 'Generate MCQ questions and study notes from YouTube videos with AI-powered analysis.',
+      image: 'https://images.pexels.com/photos/4050315/pexels-photo-4050315.jpeg?auto=compress&cs=tinysrgb&w=800',
+      link: '/admin/youtube-practice'
+    },
+    {
+      id: 4,
       title: 'Mock Tests',
       description: 'Full-length tests simulating actual exam conditions with detailed performance analysis.',
       image: 'https://images.pexels.com/photos/6238297/pexels-photo-6238297.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/test-series'
     },
     {
-      id: 4,
+      id: 5,
       title: 'Smart Notes',
       description: 'Concise, exam-focused notes covering the entire syllabus with visual aids.',
       image: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/notes'
-    },
-    {
-      id: 5,
-      title: 'Flashcards',
-      description: 'AI-powered spaced repetition system for effective memorization of facts and concepts.',
-      image: 'https://images.pexels.com/photos/6238302/pexels-photo-6238302.jpeg?auto=compress&cs=tinysrgb&w=800',
-      link: '/admin/flashcards'
     },
     {
       id: 6,
