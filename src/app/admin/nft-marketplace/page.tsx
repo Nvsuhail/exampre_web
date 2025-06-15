@@ -27,20 +27,41 @@ const PrelimsPage = () => {
     },
     {
       id: 4,
+      title: 'Mind Map Maker',
+      description: 'Create interactive mind maps to visualize complex topics and their interconnections.',
+      image: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800',
+      link: '/admin/mind-map-maker'
+    },
+    {
+      id: 5,
+      title: 'Notes Summarizer',
+      description: 'AI-powered tool to summarize lengthy notes into concise, exam-focused content.',
+      image: 'https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=800',
+      link: '/admin/notes-summarizer'
+    },
+    {
+      id: 6,
+      title: 'History Visualizer',
+      description: 'Interactive timeline and visual representation of historical events and periods.',
+      image: 'https://images.pexels.com/photos/1029141/pexels-photo-1029141.jpeg?auto=compress&cs=tinysrgb&w=800',
+      link: '/admin/history-visualizer'
+    },
+    {
+      id: 7,
       title: 'Mock Tests',
       description: 'Full-length tests simulating actual exam conditions with detailed performance analysis.',
       image: 'https://images.pexels.com/photos/6238297/pexels-photo-6238297.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/test-series'
     },
     {
-      id: 5,
+      id: 8,
       title: 'Smart Notes',
       description: 'Concise, exam-focused notes covering the entire syllabus with visual aids.',
       image: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/notes'
     },
     {
-      id: 6,
+      id: 9,
       title: 'Trend Analysis',
       description: 'Data-driven insights on question patterns and emerging trends in UPSC Prelims.',
       image: 'https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -57,10 +78,10 @@ const PrelimsPage = () => {
       <div className="space-y-6">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-navy-700 dark:text-white mb-3">
-            Preparation Toolkit
+            Complete Preparation Toolkit
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto text-sm">
-            Essential tools for UPSC Prelims success
+            Advanced tools for comprehensive UPSC Prelims preparation
           </p>
         </div>
 
