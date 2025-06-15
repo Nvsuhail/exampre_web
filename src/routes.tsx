@@ -13,6 +13,7 @@ import {
   MdAssignment,
   MdSchedule,
   MdSettings,
+  MdTrackChanges,
 } from 'react-icons/md';
 import { FiTarget, FiBookOpen, FiUsers, FiCalendar } from 'react-icons/fi';
 
@@ -35,6 +36,12 @@ const routes = [
     layout: '/admin',
     icon: <MdEdit className="h-6 w-6" />,
     path: 'data-tables',
+  },
+  {
+    name: 'Syllabus Tracker',
+    layout: '/admin',
+    path: 'syllabus-tracker',
+    icon: <MdTrackChanges className="h-6 w-6" />,
   },
   {
     name: 'Current Affairs',

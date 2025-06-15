@@ -1,6 +1,6 @@
 'use client';
 import Card from 'components/card';
-import { FiArrowLeft, FiDownload, FiPrinter } from 'react-icons/fi';
+import { FiArrowLeft, FiDownload, FiPrinter, FiTarget } from 'react-icons/fi';
 import { MdExpandMore, MdExpandLess } from 'react-icons/md';
 import { useState } from 'react';
 
@@ -163,7 +163,14 @@ const ViewSyllabusPage = () => {
             </button>
           </div>
           <div className="flex gap-3">
-            <button className="flex items-center gap-2 bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors">
+            <button 
+              onClick={() => window.location.href = '/admin/syllabus-tracker'}
+              className="flex items-center gap-2 bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors"
+            >
+              <FiTarget className="h-4 w-4" />
+              Track Progress
+            </button>
+            <button className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
               <FiDownload className="h-4 w-4" />
               Download PDF
             </button>
@@ -291,14 +298,22 @@ const ViewSyllabusPage = () => {
       {/* Quick Action */}
       <Card extra="p-6 bg-gradient-to-r from-brand-500 to-brand-600 border-0">
         <div className="text-center text-white">
-          <h3 className="text-xl font-bold mb-2">Start Your Preparation Now</h3>
-          <p className="mb-6 opacity-90">Access our complete preparation toolkit</p>
-          <button 
-            onClick={() => window.location.href = '/admin/nft-marketplace'}
-            className="bg-white text-brand-600 px-6 py-3 rounded-lg font-medium hover:bg-white/95 transition-colors"
-          >
-            Go to Preparation Toolkit
-          </button>
+          <h3 className="text-xl font-bold mb-2">Start Tracking Your Progress</h3>
+          <p className="mb-6 opacity-90">Use our syllabus tracker to monitor your preparation</p>
+          <div className="flex gap-4 justify-center">
+            <button 
+              onClick={() => window.location.href = '/admin/syllabus-tracker'}
+              className="bg-white text-brand-600 px-6 py-3 rounded-lg font-medium hover:bg-white/95 transition-colors"
+            >
+              Open Syllabus Tracker
+            </button>
+            <button 
+              onClick={() => window.location.href = '/admin/nft-marketplace'}
+              className="border-2 border-white/30 text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors"
+            >
+              Go to Toolkit
+            </button>
+          </div>
         </div>
       </Card>
     </div>
