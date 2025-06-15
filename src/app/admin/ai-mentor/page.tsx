@@ -88,76 +88,76 @@ const AIMentorPage = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-120px)] w-full flex flex-col bg-white dark:bg-navy-900">
-      {/* Minimal Header */}
-      <div className="flex items-center gap-3 p-3 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-navy-800">
-        <div className="w-7 h-7 bg-brand-500 rounded-full flex items-center justify-center">
-          <FaRobot className="h-3.5 w-3.5 text-white" />
+    <div className="h-screen w-full flex flex-col bg-white dark:bg-navy-900 overflow-hidden">
+      {/* Ultra Minimal Header - Fixed */}
+      <div className="flex items-center gap-2 px-4 py-2 border-b border-gray-100 dark:border-gray-800 bg-white dark:bg-navy-800 flex-shrink-0">
+        <div className="w-6 h-6 bg-brand-500 rounded-full flex items-center justify-center">
+          <FaRobot className="h-3 w-3 text-white" />
         </div>
-        <div>
-          <h1 className="text-base font-semibold text-navy-700 dark:text-white">AI UPSC Mentor</h1>
-        </div>
+        <h1 className="text-sm font-semibold text-navy-700 dark:text-white">AI UPSC Mentor</h1>
       </div>
 
-      {/* Messages Area - Scrollable */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-3 scrollbar-thin">
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex gap-2 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            {message.sender === 'ai' && (
-              <div className="w-6 h-6 bg-brand-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <FaRobot className="h-3 w-3 text-white" />
-              </div>
-            )}
-            
+      {/* Messages Area - Scrollable, takes remaining space */}
+      <div className="flex-1 overflow-y-auto px-4 py-3 scrollbar-thin min-h-0">
+        <div className="space-y-3">
+          {messages.map((message) => (
             <div
-              className={`max-w-[85%] p-2.5 rounded-lg text-sm ${
-                message.sender === 'user'
-                  ? 'bg-brand-500 text-white'
-                  : 'bg-gray-50 dark:bg-navy-800 text-navy-700 dark:text-white'
-              }`}
+              key={message.id}
+              className={`flex gap-2 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <p className="leading-relaxed whitespace-pre-line">
-                {message.text}
-              </p>
-            </div>
+              {message.sender === 'ai' && (
+                <div className="w-5 h-5 bg-brand-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <FaRobot className="h-2.5 w-2.5 text-white" />
+                </div>
+              )}
+              
+              <div
+                className={`max-w-[85%] px-3 py-2 rounded-lg text-sm ${
+                  message.sender === 'user'
+                    ? 'bg-brand-500 text-white'
+                    : 'bg-gray-50 dark:bg-navy-800 text-navy-700 dark:text-white'
+                }`}
+              >
+                <p className="leading-relaxed whitespace-pre-line">
+                  {message.text}
+                </p>
+              </div>
 
-            {message.sender === 'user' && (
-              <div className="w-6 h-6 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                <FiUser className="h-3 w-3 text-gray-600 dark:text-gray-300" />
-              </div>
-            )}
-          </div>
-        ))}
-        
-        {isTyping && (
-          <div className="flex gap-2 justify-start">
-            <div className="w-6 h-6 bg-brand-500 rounded-full flex items-center justify-center mt-1">
-              <FaRobot className="h-3 w-3 text-white" />
+              {message.sender === 'user' && (
+                <div className="w-5 h-5 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <FiUser className="h-2.5 w-2.5 text-gray-600 dark:text-gray-300" />
+                </div>
+              )}
             </div>
-            <div className="bg-gray-50 dark:bg-navy-800 p-2.5 rounded-lg">
-              <div className="flex space-x-1">
-                <div className="w-1.5 h-1.5 bg-brand-400 rounded-full animate-bounce"></div>
-                <div className="w-1.5 h-1.5 bg-brand-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                <div className="w-1.5 h-1.5 bg-brand-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+          ))}
+          
+          {isTyping && (
+            <div className="flex gap-2 justify-start">
+              <div className="w-5 h-5 bg-brand-500 rounded-full flex items-center justify-center mt-1">
+                <FaRobot className="h-2.5 w-2.5 text-white" />
+              </div>
+              <div className="bg-gray-50 dark:bg-navy-800 px-3 py-2 rounded-lg">
+                <div className="flex space-x-1">
+                  <div className="w-1 h-1 bg-brand-400 rounded-full animate-bounce"></div>
+                  <div className="w-1 h-1 bg-brand-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-1 h-1 bg-brand-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
-      {/* Quick Prompts - Only when no conversation */}
+      {/* Quick Prompts - Only when no conversation, Fixed */}
       {messages.length === 1 && (
-        <div className="px-3 py-2 border-t border-gray-100 dark:border-gray-800">
-          <div className="flex gap-1.5 overflow-x-auto scrollbar-thin pb-1">
+        <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-800 flex-shrink-0">
+          <div className="flex gap-1 overflow-x-auto scrollbar-thin pb-1">
             {quickPrompts.map((prompt, index) => (
               <button
                 key={index}
                 onClick={() => setInputText(prompt)}
-                className="flex-shrink-0 px-2.5 py-1.5 bg-gray-100 dark:bg-navy-700 text-gray-600 dark:text-gray-300 rounded-full text-xs hover:bg-brand-100 dark:hover:bg-brand-900/30 hover:text-brand-600 dark:hover:text-brand-300 transition-colors whitespace-nowrap"
+                className="flex-shrink-0 px-2 py-1 bg-gray-100 dark:bg-navy-700 text-gray-600 dark:text-gray-300 rounded-full text-xs hover:bg-brand-100 dark:hover:bg-brand-900/30 hover:text-brand-600 dark:hover:text-brand-300 transition-colors whitespace-nowrap"
               >
                 {prompt}
               </button>
@@ -167,7 +167,7 @@ const AIMentorPage = () => {
       )}
 
       {/* Input Area - Fixed at Bottom */}
-      <div className="p-3 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-navy-800">
+      <div className="px-4 py-3 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-navy-800 flex-shrink-0">
         <div className="flex gap-2">
           <input
             type="text"
@@ -180,14 +180,14 @@ const AIMentorPage = () => {
               }
             }}
             placeholder="Ask about UPSC preparation..."
-            className="flex-1 p-2.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-navy-900 text-navy-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-brand-500 text-sm"
+            className="flex-1 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-navy-900 text-navy-700 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-500 focus:border-brand-500 text-sm"
           />
           <button
             onClick={handleSendMessage}
             disabled={!inputText.trim() || isTyping}
-            className="w-10 h-10 bg-brand-500 hover:bg-brand-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white rounded-lg flex items-center justify-center transition-colors disabled:cursor-not-allowed"
+            className="w-9 h-9 bg-brand-500 hover:bg-brand-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white rounded-lg flex items-center justify-center transition-colors disabled:cursor-not-allowed"
           >
-            <FiSend className="h-4 w-4" />
+            <FiSend className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
