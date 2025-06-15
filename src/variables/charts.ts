@@ -470,3 +470,148 @@ export const lineChartOptionsPerformance: ApexGeneric = {
     }
   ]
 };
+
+// New Weekly Performance Data and Options
+export const barChartDataWeeklyPerformance = [
+  {
+    name: 'Test Answers Written',
+    data: [12, 18, 15, 22, 20, 25, 19],
+    color: '#4318FF',
+  },
+  {
+    name: 'MCQ Solved',
+    data: [35, 42, 38, 55, 48, 62, 45],
+    color: '#6AD2FF',
+  },
+  {
+    name: 'Reading Hours',
+    data: [3, 4, 3.5, 5, 4.5, 6, 4],
+    color: '#FFB547',
+  },
+];
+
+export const barChartOptionsWeeklyPerformance: ApexGeneric = {
+  chart: {
+    type: 'bar',
+    stacked: false,
+    toolbar: {
+      show: false,
+    },
+    background: 'transparent',
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 800,
+      animateGradually: {
+        enabled: true,
+        delay: 150
+      }
+    }
+  },
+  plotOptions: {
+    bar: {
+      borderRadius: 8,
+      columnWidth: '60%',
+      dataLabels: {
+        position: 'top',
+      },
+    }
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  stroke: {
+    show: true,
+    width: 2,
+    colors: ['transparent']
+  },
+  xaxis: {
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    labels: {
+      style: {
+        colors: '#A3AED0',
+        fontSize: '12px',
+        fontWeight: '500',
+      },
+    },
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+  },
+  yaxis: {
+    show: false,
+    labels: {
+      style: {
+        colors: '#A3AED0',
+        fontSize: '12px',
+        fontWeight: '500',
+      },
+    },
+  },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shade: 'light',
+      type: 'vertical',
+      shadeIntensity: 0.3,
+      gradientToColors: ['#7551FF', '#8AD4FF', '#FFD580'],
+      inverseColors: false,
+      opacityFrom: 0.9,
+      opacityTo: 0.6,
+      stops: [0, 100],
+    },
+  },
+  tooltip: {
+    style: {
+      fontSize: '12px',
+      fontFamily: 'DM Sans, sans-serif',
+    },
+    theme: 'dark',
+    y: {
+      formatter: function (val: number, opts: any) {
+        if (opts.seriesIndex === 2) {
+          return val + ' hours'
+        }
+        return val + ' items'
+      }
+    }
+  },
+  legend: {
+    show: false,
+  },
+  grid: {
+    show: true,
+    borderColor: 'rgba(163, 174, 208, 0.1)',
+    strokeDashArray: 3,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+    yaxis: {
+      lines: {
+        show: true,
+      },
+    },
+  },
+  colors: ['#4318FF', '#6AD2FF', '#FFB547'],
+  responsive: [
+    {
+      breakpoint: 768,
+      options: {
+        chart: {
+          height: 250,
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: '70%',
+          }
+        }
+      }
+    }
+  ]
+};
