@@ -327,3 +327,146 @@ export const lineChartOptionsTotalSpent = {
     show: false,
   },
 };
+
+// New Performance Graph Data and Options
+export const lineChartDataPerformance = [
+  {
+    name: 'Performance',
+    data: [75, 82, 78, 88, 85, 92, 89, 95, 92],
+    color: '#4318FF',
+  },
+  {
+    name: 'Target',
+    data: [80, 80, 80, 80, 80, 80, 80, 80, 80],
+    color: '#6AD2FF',
+  },
+];
+
+export const lineChartOptionsPerformance: ApexGeneric = {
+  legend: {
+    show: false,
+  },
+  theme: {
+    mode: 'light',
+  },
+  chart: {
+    type: 'line',
+    toolbar: {
+      show: false,
+    },
+    background: 'transparent',
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 800,
+      animateGradually: {
+        enabled: true,
+        delay: 150
+      },
+      dynamicAnimation: {
+        enabled: true,
+        speed: 350
+      }
+    }
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  stroke: {
+    curve: 'smooth',
+    width: [4, 2],
+    dashArray: [0, 5]
+  },
+  tooltip: {
+    style: {
+      fontSize: '12px',
+      fontFamily: 'DM Sans, sans-serif',
+    },
+    theme: 'dark',
+    x: {
+      show: true,
+    },
+    y: {
+      formatter: function (val: number) {
+        return val + '%'
+      }
+    }
+  },
+  grid: {
+    show: true,
+    borderColor: 'rgba(163, 174, 208, 0.1)',
+    strokeDashArray: 3,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+    yaxis: {
+      lines: {
+        show: true,
+      },
+    },
+  },
+  xaxis: {
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+    labels: {
+      style: {
+        colors: '#A3AED0',
+        fontSize: '12px',
+        fontWeight: '500',
+      },
+    },
+    type: 'category',
+    categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue'],
+  },
+  yaxis: {
+    show: false,
+    min: 60,
+    max: 100,
+  },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shade: 'light',
+      type: 'vertical',
+      shadeIntensity: 0.5,
+      gradientToColors: ['#7551FF', '#6AD2FF'],
+      inverseColors: false,
+      opacityFrom: 0.8,
+      opacityTo: 0.1,
+      stops: [0, 100],
+    },
+  },
+  colors: ['#4318FF', '#6AD2FF'],
+  markers: {
+    size: [6, 4],
+    colors: ['#4318FF', '#6AD2FF'],
+    strokeColors: '#fff',
+    strokeWidth: 2,
+    hover: {
+      size: 8,
+    }
+  },
+  responsive: [
+    {
+      breakpoint: 768,
+      options: {
+        chart: {
+          height: 250,
+        },
+        stroke: {
+          width: [3, 2],
+        },
+        markers: {
+          size: [4, 3],
+        }
+      }
+    }
+  ]
+};

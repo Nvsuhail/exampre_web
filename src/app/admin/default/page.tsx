@@ -1,7 +1,7 @@
 'use client';
 import MiniCalendar from 'components/calendar/MiniCalendar';
 import WeeklyRevenue from 'components/admin/default/WeeklyRevenue';
-import TotalSpent from 'components/admin/default/TotalSpent';
+import PerformanceGraph from 'components/admin/default/TotalSpent';
 import PieChartCard from 'components/admin/default/PieChartCard';
 import { IoMdHome } from 'react-icons/io';
 import { IoDocuments } from 'react-icons/io5';
@@ -45,7 +45,7 @@ const Dashboard = () => {
 
       {/* Charts */}
       <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <TotalSpent />
+        <PerformanceGraph />
         <WeeklyRevenue />
       </div>
 
