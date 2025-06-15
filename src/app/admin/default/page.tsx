@@ -2,7 +2,6 @@
 import MiniCalendar from 'components/calendar/MiniCalendar';
 import WeeklyPerformance from 'components/admin/default/WeeklyRevenue';
 import PerformanceGraph from 'components/admin/default/TotalSpent';
-import PieChartCard from 'components/admin/default/PieChartCard';
 import { IoMdHome } from 'react-icons/io';
 import { IoDocuments } from 'react-icons/io5';
 import { MdBarChart, MdDashboard } from 'react-icons/md';
@@ -12,7 +11,6 @@ import Widget from 'components/widget/Widget';
 import CheckTable from 'components/admin/default/CheckTable';
 import ComplexTable from 'components/admin/default/ComplexTable';
 import DailyTraffic from 'components/admin/default/DailyTraffic';
-import TaskCard from 'components/admin/default/TaskCard';
 import tableDataCheck from 'variables/data-tables/tableDataCheck';
 import tableDataComplex from 'variables/data-tables/tableDataComplex';
 
@@ -49,28 +47,24 @@ const Dashboard = () => {
         <WeeklyPerformance />
       </div>
 
-      {/* Tables & Charts */}
+      {/* Tables & Calendar */}
       <div className="mt-5 grid grid-cols-1 gap-5 xl:grid-cols-2">
-        {/* Check Table */}
+        {/* Task Management */}
         <div>
           <CheckTable tableData={tableDataCheck} />
         </div>
 
-        {/* Traffic chart & Pie Chart */}
-        <div className="grid grid-cols-1 gap-5 rounded-[20px] lg:grid-cols-2">
+        {/* Today's Happenings */}
+        <div>
           <DailyTraffic />
-          <PieChartCard />
         </div>
 
-        {/* Complex Table , Task & Calendar */}
+        {/* Today's Leaderboard */}
         <ComplexTable tableData={tableDataComplex} />
 
-        {/* Task chart & Calendar */}
-        <div className="grid grid-cols-1 gap-5 rounded-[20px] lg:grid-cols-2">
-          <TaskCard />
-          <div className="grid grid-cols-1 rounded-[20px]">
-            <MiniCalendar />
-          </div>
+        {/* Enhanced Calendar */}
+        <div className="grid grid-cols-1 rounded-[20px]">
+          <MiniCalendar />
         </div>
       </div>
     </div>
