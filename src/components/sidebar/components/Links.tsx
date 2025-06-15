@@ -29,32 +29,36 @@ export const SidebarLinks = (props: { routes: RoutesType[] }): JSX.Element => {
       ) {
         return (
           <NavLink key={index} href={route.layout + '/' + route.path}>
-            <div className="relative mb-3 flex hover:cursor-pointer">
+            <div className="relative mb-2 flex hover:cursor-pointer group">
               <li
-                className="my-[3px] flex cursor-pointer items-center px-8"
+                className={`my-[3px] flex cursor-pointer items-center px-6 py-3 rounded-xl mx-2 transition-all duration-200 ${
+                  activeRoute(route.path) === true
+                    ? 'bg-gradient-to-r from-brand-500 to-brand-600 shadow-lg shadow-brand-500/25'
+                    : 'hover:bg-gray-100 dark:hover:bg-navy-700/50'
+                }`}
                 key={index}
               >
                 <span
-                  className={`${
+                  className={`transition-all duration-200 ${
                     activeRoute(route.path) === true
-                      ? 'font-bold text-brand-500 dark:text-white'
-                      : 'font-medium text-gray-600'
+                      ? 'text-white scale-110'
+                      : 'text-gray-600 dark:text-gray-400 group-hover:text-brand-500 dark:group-hover:text-brand-400'
                   }`}
                 >
                   {route.icon ? route.icon : <DashIcon />}{' '}
                 </span>
                 <p
-                  className={`leading-1 ml-4 flex ${
+                  className={`leading-1 ml-4 flex font-medium transition-all duration-200 ${
                     activeRoute(route.path) === true
-                      ? 'font-bold text-navy-700 dark:text-white'
-                      : 'font-medium text-gray-600'
+                      ? 'text-white font-semibold'
+                      : 'text-gray-700 dark:text-gray-300 group-hover:text-brand-500 dark:group-hover:text-brand-400'
                   }`}
                 >
                   {route.name}
                 </p>
               </li>
               {activeRoute(route.path) ? (
-                <div className="absolute right-0 top-px h-9 w-1 rounded-lg bg-brand-500 dark:bg-brand-400" />
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-1 rounded-full bg-white shadow-lg" />
               ) : null}
             </div>
           </NavLink>
