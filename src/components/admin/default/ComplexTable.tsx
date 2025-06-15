@@ -1,166 +1,227 @@
 import React from "react";
 import CardMenu from "components/card/CardMenu";
 import Card from "components/card";
-import Progress from "components/progress";
-import { MdCancel, MdCheckCircle, MdOutlineError } from "react-icons/md";
+import { MdTrendingUp, MdTrendingDown, MdRemove } from "react-icons/md";
+import { FiAward, FiUser, FiTarget } from "react-icons/fi";
 
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-} from "@tanstack/react-table";
-
-type RowObj = {
+type LeaderboardEntry = {
+  rank: number;
   name: string;
-  status: string;
-  date: string;
-  progress: number;
+  avatar: string;
+  score: number;
+  change: number;
+  accuracy: number;
+  testsCompleted: number;
+  badge?: string;
 };
 
-const columnHelper = createColumnHelper<RowObj>();
+const leaderboardData: LeaderboardEntry[] = [
+  {
+    rank: 1,
+    name: "Arjun Sharma",
+    avatar: "AS",
+    score: 2847,
+    change: 12,
+    accuracy: 94,
+    testsCompleted: 156,
+    badge: "🏆"
+  },
+  {
+    rank: 2,
+    name: "Priya Patel",
+    avatar: "PP",
+    score: 2756,
+    change: 8,
+    accuracy: 91,
+    testsCompleted: 142,
+    badge: "🥈"
+  },
+  {
+    rank: 3,
+    name: "Rahul Kumar",
+    avatar: "RK",
+    score: 2698,
+    change: -3,
+    accuracy: 89,
+    testsCompleted: 138,
+    badge: "🥉"
+  },
+  {
+    rank: 4,
+    name: "Sneha Singh",
+    avatar: "SS",
+    score: 2634,
+    change: 15,
+    accuracy: 87,
+    testsCompleted: 134
+  },
+  {
+    rank: 5,
+    name: "Vikram Joshi",
+    avatar: "VJ",
+    score: 2589,
+    change: 0,
+    accuracy: 85,
+    testsCompleted: 129
+  },
+  {
+    rank: 6,
+    name: "Anita Gupta",
+    avatar: "AG",
+    score: 2534,
+    change: -7,
+    accuracy: 83,
+    testsCompleted: 125
+  }
+];
 
-// const columns = columnsDataCheck;
-export default function ComplexTable(props: { tableData: any }) {
-  const { tableData } = props;
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  let defaultData = tableData;
-  const columns = [
-    columnHelper.accessor("name", {
-      id: "name",
-      header: () => (
-        <p className="text-sm font-bold text-gray-600 dark:text-white">NAME</p>
-      ),
-      cell: (info) => (
-        <p className="text-sm font-bold text-navy-700 dark:text-white">
-          {info.getValue()}
-        </p>
-      ),
-    }),
-    columnHelper.accessor("status", {
-      id: "status",
-      header: () => (
-        <p className="text-sm font-bold text-gray-600 dark:text-white">
-          STATUS
-        </p>
-      ),
-      cell: (info) => (
-        <div className="flex items-center">
-          {info.getValue() === "Approved" ? (
-            <MdCheckCircle className="text-green-500 me-1 dark:text-green-300" />
-          ) : info.getValue() === "Disable" ? (
-            <MdCancel className="text-red-500 me-1 dark:text-red-300" />
-          ) : info.getValue() === "Error" ? (
-            <MdOutlineError className="text-amber-500 me-1 dark:text-amber-300" />
-          ) : null}
-          <p className="text-sm font-bold text-navy-700 dark:text-white">
-            {info.getValue()}
-          </p>
-        </div>
-      ),
-    }),
-    columnHelper.accessor("date", {
-      id: "date",
-      header: () => (
-        <p className="text-sm font-bold text-gray-600 dark:text-white">DATE</p>
-      ),
-      cell: (info) => (
-        <p className="text-sm font-bold text-navy-700 dark:text-white">
-          {info.getValue()}
-        </p>
-      ),
-    }),
-    columnHelper.accessor("progress", {
-      id: "progress",
-      header: () => (
-        <p className="text-sm font-bold text-gray-600 dark:text-white">
-          PROGRESS
-        </p>
-      ),
-      cell: (info) => (
-        <div className="flex items-center">
-          <Progress width="w-[108px]" value={info.getValue()} />
-        </div>
-      ),
-    }),
-  ]; // eslint-disable-next-line
-  const [data, setData] = React.useState(() => [...defaultData]);
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-      sorting,
-    },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    debugTable: true,
-  });
+export default function TodaysLeaderboard() {
+  const getTrendIcon = (change: number) => {
+    if (change > 0) return <MdTrendingUp className="h-4 w-4 text-green-500" />;
+    if (change < 0) return <MdTrendingDown className="h-4 w-4 text-red-500" />;
+    return <MdRemove className="h-4 w-4 text-gray-400" />;
+  };
+
+  const getTrendColor = (change: number) => {
+    if (change > 0) return "text-green-500";
+    if (change < 0) return "text-red-500";
+    return "text-gray-400";
+  };
+
+  const getRankColor = (rank: number) => {
+    switch (rank) {
+      case 1: return "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white";
+      case 2: return "bg-gradient-to-r from-gray-300 to-gray-500 text-white";
+      case 3: return "bg-gradient-to-r from-orange-400 to-orange-600 text-white";
+      default: return "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300";
+    }
+  };
+
   return (
-    <Card extra={"w-full h-full px-6 pb-6 sm:overflow-x-auto"}>
-      <div className="relative flex items-center justify-between pt-4">
-        <div className="text-xl font-bold text-navy-700 dark:text-white">
-          Complex Table
+    <Card extra={"w-full h-full px-6 pb-6"}>
+      <div className="relative flex items-center justify-between pt-4 pb-2">
+        <div>
+          <h3 className="text-xl font-bold text-navy-700 dark:text-white">
+            Today's Leaderboard
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Top performers this week
+          </p>
         </div>
         <CardMenu />
       </div>
 
-      <div className="mt-8 overflow-x-scroll xl:overflow-x-hidden">
-        <table className="w-full">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="!border-px !border-gray-400">
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <th
-                      key={header.id}
-                      colSpan={header.colSpan}
-                      onClick={header.column.getToggleSortingHandler()}
-                      className="cursor-pointer border-b-[1px] border-gray-200 pt-4 pb-2 pr-4 text-start"
-                    >
-                      <div className="items-center justify-between text-xs text-gray-200">
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {{
-                          asc: "",
-                          desc: "",
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </div>
-                    </th>
-                  );
-                })}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table
-              .getRowModel()
-              .rows.slice(0, 5)
-              .map((row) => {
-                return (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <td
-                          key={cell.id}
-                          className="min-w-[150px] border-white/0 py-3  pr-4"
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                );
-              })}
-          </tbody>
-        </table>
+      {/* Your Rank Card */}
+      <div className="mb-6 bg-gradient-to-r from-brand-500 to-brand-600 rounded-xl p-4 text-white">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold">
+              YU
+            </div>
+            <div>
+              <p className="font-semibold">Your Rank</p>
+              <p className="text-sm opacity-90">Keep pushing!</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-2xl font-bold">#127</p>
+            <div className="flex items-center gap-1">
+              <MdTrendingUp className="h-4 w-4" />
+              <span className="text-sm">+5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-3 max-h-96 overflow-y-auto">
+        {leaderboardData.map((entry) => (
+          <div
+            key={entry.rank}
+            className="group bg-white dark:bg-navy-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:border-brand-500/30 transition-all duration-300"
+          >
+            <div className="flex items-center justify-between">
+              {/* Rank and User Info */}
+              <div className="flex items-center gap-4">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${getRankColor(entry.rank)}`}>
+                  {entry.badge || entry.rank}
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-brand-400 to-brand-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                    {entry.avatar}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-navy-700 dark:text-white">
+                      {entry.name}
+                    </h4>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      {entry.testsCompleted} tests completed
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Score and Stats */}
+              <div className="text-right">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-lg font-bold text-navy-700 dark:text-white">
+                    {entry.score.toLocaleString()}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {getTrendIcon(entry.change)}
+                    <span className={`text-sm font-medium ${getTrendColor(entry.change)}`}>
+                      {entry.change > 0 ? '+' : ''}{entry.change}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-400">
+                  {entry.accuracy}% accuracy
+                </p>
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="mt-3">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-gray-600 dark:text-gray-400">Weekly Progress</span>
+                <span className="text-xs font-medium text-brand-500">{entry.accuracy}%</span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                <div
+                  className="bg-gradient-to-r from-brand-500 to-brand-400 h-1.5 rounded-full transition-all duration-500"
+                  style={{ width: `${entry.accuracy}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Leaderboard Stats */}
+      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="grid grid-cols-3 gap-4">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <FiAward className="h-4 w-4 text-brand-500" />
+              <span className="text-xs text-gray-600 dark:text-gray-400">Top Score</span>
+            </div>
+            <p className="text-lg font-bold text-navy-700 dark:text-white">2,847</p>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <FiUser className="h-4 w-4 text-brand-500" />
+              <span className="text-xs text-gray-600 dark:text-gray-400">Participants</span>
+            </div>
+            <p className="text-lg font-bold text-navy-700 dark:text-white">1,247</p>
+          </div>
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <FiTarget className="h-4 w-4 text-brand-500" />
+              <span className="text-xs text-gray-600 dark:text-gray-400">Avg Score</span>
+            </div>
+            <p className="text-lg font-bold text-navy-700 dark:text-white">1,856</p>
+          </div>
+        </div>
       </div>
     </Card>
   );
