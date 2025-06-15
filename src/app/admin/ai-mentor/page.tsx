@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Card from 'components/card';
 import { FiSend, FiUser, FiClock, FiBookOpen, FiTarget, FiTrendingUp } from 'react-icons/fi';
-import { MdClear, MdHistory, MdLightbulb, MdOutlineRobot } from 'react-icons/md';
+import { MdClear, MdHistory, MdLightbulb, MdRobot } from 'react-icons/md';
 
 interface Message {
   id: string;
@@ -244,7 +244,7 @@ const AIMentorPage = () => {
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-brand-500 to-brand-600 rounded-full flex items-center justify-center">
-                <MdOutlineRobot className="h-5 w-5 text-white" />
+                <MdRobot className="h-5 w-5 text-white" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-navy-700 dark:text-white">
@@ -273,7 +273,7 @@ const AIMentorPage = () => {
               >
                 {message.sender === 'ai' && (
                   <div className="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <MdOutlineRobot className="h-4 w-4 text-white" />
+                    <MdRobot className="h-4 w-4 text-white" />
                   </div>
                 )}
                 
@@ -307,7 +307,7 @@ const AIMentorPage = () => {
             {isTyping && (
               <div className="flex gap-3 justify-start">
                 <div className="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-600 rounded-full flex items-center justify-center">
-                  <MdOutlineRobot className="h-4 w-4 text-white" />
+                  <MdRobot className="h-4 w-4 text-white" />
                 </div>
                 <div className="bg-gray-100 dark:bg-navy-800 p-4 rounded-2xl">
                   <div className="flex space-x-1">
