@@ -5,8 +5,8 @@ import TotalSpent from 'components/admin/default/TotalSpent';
 import PieChartCard from 'components/admin/default/PieChartCard';
 import { IoMdHome } from 'react-icons/io';
 import { IoDocuments } from 'react-icons/io5';
-import { MdBarChart, MdDashboard, MdOutlineTarget } from 'react-icons/md';
-import { FaFire, FaBrain, FaPen } from 'react-icons/fa';
+import { MdBarChart, MdDashboard } from 'react-icons/md';
+import { FaFire, FaBrain, FaPen, FaBullseye } from 'react-icons/fa';
 
 import Widget from 'components/widget/Widget';
 import CheckTable from 'components/admin/default/CheckTable';
@@ -27,7 +27,7 @@ const Dashboard = () => {
           subtitle={'42 days'}
         />
         <Widget
-          icon={<MdOutlineTarget className="h-6 w-6" />}
+          icon={<FaBullseye className="h-6 w-6" />}
           title={'Today\'s Target'}
           subtitle={'85%'}
         />
