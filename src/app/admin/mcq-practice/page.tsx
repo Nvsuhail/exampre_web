@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Card from 'components/card';
-import { FiSearch, FiBookOpen, FiEdit3, FiGlobe, FiClock, FiCheck, FiX, FiArrowLeft, FiArrowRight, FiUpload } from 'react-icons/fi';
-import { MdClose, MdTimer, MdQuiz, MdLightbulb } from 'react-icons/md';
+import { FiSearch, FiBookOpen, FiEdit3, FiGlobe, FiClock, FiCheck, FiX, FiArrowLeft, FiArrowRight, FiUpload, FiSettings } from 'react-icons/fi';
+import { MdClose, MdTimer, MdQuiz, MdLightbulb, MdTune } from 'react-icons/md';
 
 interface Question {
   id: string;
@@ -24,6 +24,7 @@ interface QuizState {
 }
 
 type SourceType = 'notes' | 'topic' | 'current-affairs';
+type DifficultyLevel = 'Easy' | 'Medium' | 'Hard' | 'Mixed';
 
 const MCQPracticePage = () => {
   const [sourceType, setSourceType] = useState<SourceType>('topic');
@@ -31,6 +32,7 @@ const MCQPracticePage = () => {
   const [topicText, setTopicText] = useState('');
   const [currentAffairsTopic, setCurrentAffairsTopic] = useState('');
   const [questionCount, setQuestionCount] = useState(3);
+  const [difficultyLevel, setDifficultyLevel] = useState<DifficultyLevel>('Mixed');
   const [generatedQuestions, setGeneratedQuestions] = useState<Question[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [quizMode, setQuizMode] = useState(false);
@@ -44,6 +46,7 @@ const MCQPracticePage = () => {
   });
 
   const questionCounts = [1, 2, 3, 4, 5];
+  const difficultyLevels: DifficultyLevel[] = ['Easy', 'Medium', 'Hard', 'Mixed'];
 
   const sampleTopics = [
     'Indian Constitution',
@@ -122,78 +125,106 @@ const MCQPracticePage = () => {
 
     // Simulate AI question generation
     setTimeout(() => {
-      const questions = generateSampleQuestions(sourceContent, sourceLabel, questionCount);
+      const questions = generateSampleQuestions(sourceContent, sourceLabel, questionCount, difficultyLevel);
       setGeneratedQuestions(questions);
       setIsGenerating(false);
     }, 2000);
   };
 
-  const generateSampleQuestions = (content: string, source: string, count: number): Question[] => {
-    const questionTemplates = [
-      {
-        question: `Which of the following is a key feature of ${content}?`,
-        options: [
-          'Democratic governance',
-          'Centralized authority',
-          'Federal structure',
-          'Unitary system'
-        ],
-        correctAnswer: 0,
-        explanation: `${content} emphasizes democratic principles and governance structures that ensure representation and accountability.`,
-        difficulty: 'Medium' as const
-      },
-      {
-        question: `What is the primary objective of ${content}?`,
-        options: [
-          'Economic development',
-          'Social justice',
-          'Political stability',
-          'All of the above'
-        ],
-        correctAnswer: 3,
-        explanation: `${content} aims to achieve comprehensive development including economic growth, social justice, and political stability.`,
-        difficulty: 'Easy' as const
-      },
-      {
-        question: `In the context of ${content}, which statement is most accurate?`,
-        options: [
-          'It focuses only on short-term goals',
-          'It emphasizes sustainable development',
-          'It ignores environmental concerns',
-          'It prioritizes only economic factors'
-        ],
-        correctAnswer: 1,
-        explanation: `${content} emphasizes sustainable development that balances economic, social, and environmental considerations.`,
-        difficulty: 'Hard' as const
-      },
-      {
-        question: `The implementation of ${content} primarily involves:`,
-        options: [
-          'Central government only',
-          'State governments only',
-          'Both central and state governments',
-          'International organizations'
-        ],
-        correctAnswer: 2,
-        explanation: `${content} requires coordinated efforts from both central and state governments for effective implementation.`,
-        difficulty: 'Medium' as const
-      },
-      {
-        question: `Which of the following best describes the impact of ${content}?`,
-        options: [
-          'Limited to urban areas',
-          'Nationwide coverage',
-          'International scope',
-          'Regional focus only'
-        ],
-        correctAnswer: 1,
-        explanation: `${content} is designed to have nationwide coverage and impact across all regions and communities.`,
-        difficulty: 'Easy' as const
+  const generateSampleQuestions = (content: string, source: string, count: number, difficulty: DifficultyLevel): Question[] => {
+    const questionTemplates = {
+      Easy: [
+        {
+          question: `Which of the following is a key feature of ${content}?`,
+          options: [
+            'Democratic governance',
+            'Centralized authority',
+            'Federal structure',
+            'Unitary system'
+          ],
+          correctAnswer: 0,
+          explanation: `${content} emphasizes democratic principles and governance structures that ensure representation and accountability.`,
+          difficulty: 'Easy' as const
+        },
+        {
+          question: `What is the primary objective of ${content}?`,
+          options: [
+            'Economic development',
+            'Social justice',
+            'Political stability',
+            'All of the above'
+          ],
+          correctAnswer: 3,
+          explanation: `${content} aims to achieve comprehensive development including economic growth, social justice, and political stability.`,
+          difficulty: 'Easy' as const
+        }
+      ],
+      Medium: [
+        {
+          question: `In the context of ${content}, which statement is most accurate?`,
+          options: [
+            'It focuses only on short-term goals',
+            'It emphasizes sustainable development',
+            'It ignores environmental concerns',
+            'It prioritizes only economic factors'
+          ],
+          correctAnswer: 1,
+          explanation: `${content} emphasizes sustainable development that balances economic, social, and environmental considerations.`,
+          difficulty: 'Medium' as const
+        },
+        {
+          question: `The implementation of ${content} primarily involves:`,
+          options: [
+            'Central government only',
+            'State governments only',
+            'Both central and state governments',
+            'International organizations'
+          ],
+          correctAnswer: 2,
+          explanation: `${content} requires coordinated efforts from both central and state governments for effective implementation.`,
+          difficulty: 'Medium' as const
+        }
+      ],
+      Hard: [
+        {
+          question: `Analyze the long-term implications of ${content} on India's socio-economic framework:`,
+          options: [
+            'Limited impact on rural development',
+            'Comprehensive transformation across sectors',
+            'Focus only on urban infrastructure',
+            'Temporary policy measure'
+          ],
+          correctAnswer: 1,
+          explanation: `${content} is designed to bring about comprehensive transformation across multiple sectors, affecting both urban and rural development patterns.`,
+          difficulty: 'Hard' as const
+        },
+        {
+          question: `Which of the following best describes the constitutional validity and legal framework of ${content}?`,
+          options: [
+            'Violates federal principles',
+            'Aligns with constitutional provisions',
+            'Requires constitutional amendment',
+            'Conflicts with fundamental rights'
+          ],
+          correctAnswer: 1,
+          explanation: `${content} is designed to align with existing constitutional provisions while respecting federal principles and fundamental rights.`,
+          difficulty: 'Hard' as const
+        }
+      ]
+    };
+
+    const getQuestionsForDifficulty = (targetDifficulty: DifficultyLevel) => {
+      if (targetDifficulty === 'Mixed') {
+        const allQuestions = [...questionTemplates.Easy, ...questionTemplates.Medium, ...questionTemplates.Hard];
+        return allQuestions;
       }
-    ];
+      return questionTemplates[targetDifficulty] || questionTemplates.Medium;
+    };
+
+    const availableQuestions = getQuestionsForDifficulty(difficulty);
 
     return Array.from({ length: count }, (_, index) => {
-      const template = questionTemplates[index % questionTemplates.length];
+      const template = availableQuestions[index % availableQuestions.length];
       return {
         id: `mcq-${index + 1}`,
         question: template.question,
@@ -281,24 +312,63 @@ const MCQPracticePage = () => {
     setCurrentAffairsTopic('');
     setGeneratedQuestions([]);
     setQuestionCount(3);
+    setDifficultyLevel('Mixed');
   };
 
   const currentQuestion = generatedQuestions[quizState.currentQuestionIndex];
   const selectedAnswer = quizState.selectedAnswers[quizState.currentQuestionIndex];
 
-  // Calculate quiz results
-  const correctAnswers = Object.entries(quizState.selectedAnswers).filter(
-    ([index, answer]) => generatedQuestions[parseInt(index)]?.correctAnswer === answer
-  ).length;
-  const totalQuestions = generatedQuestions.length;
-  const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
-  const avgTimePerQuestion = totalQuestions > 0 ? Math.round(quizState.timeElapsed / totalQuestions) : 0;
+  // Calculate quiz results with UPSC marking scheme
+  const calculateMarks = () => {
+    let totalMarks = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let unattemptedCount = 0;
+
+    generatedQuestions.forEach((question, index) => {
+      const selectedAnswer = quizState.selectedAnswers[index];
+      
+      if (selectedAnswer === undefined) {
+        // Unattempted - no marks deducted
+        unattemptedCount++;
+      } else if (selectedAnswer === question.correctAnswer) {
+        // Correct answer - +2 marks
+        totalMarks += 2;
+        correctCount++;
+      } else {
+        // Wrong answer - -1/3 marks (negative marking)
+        totalMarks -= 1/3;
+        wrongCount++;
+      }
+    });
+
+    return {
+      totalMarks: Math.round(totalMarks * 100) / 100, // Round to 2 decimal places
+      correctCount,
+      wrongCount,
+      unattemptedCount,
+      maxPossibleMarks: generatedQuestions.length * 2
+    };
+  };
+
+  const marks = calculateMarks();
+  const accuracy = generatedQuestions.length > 0 ? Math.round((marks.correctCount / generatedQuestions.length) * 100) : 0;
+  const avgTimePerQuestion = generatedQuestions.length > 0 ? Math.round(quizState.timeElapsed / generatedQuestions.length) : 0;
+
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
+      case 'Easy': return 'bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400';
+      case 'Medium': return 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400';
+      case 'Hard': return 'bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400';
+      default: return 'bg-gray-100 text-gray-600 dark:bg-gray-900/20 dark:text-gray-400';
+    }
+  };
 
   // Quiz Results Component
   if (quizMode && quizState.isCompleted) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <Card extra="w-full max-w-2xl p-8 text-center">
+        <Card extra="w-full max-w-3xl p-8 text-center">
           <div className="w-20 h-20 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <FiCheck className="h-10 w-10 text-white" />
           </div>
@@ -307,62 +377,111 @@ const MCQPracticePage = () => {
             Practice Completed!
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Excellent work! Here's your performance summary
+            Excellent work! Here's your detailed performance analysis
           </p>
 
-          {/* Results Grid */}
+          {/* UPSC Marks Display - Prominent */}
+          <div className="bg-gradient-to-r from-brand-500 to-brand-600 rounded-xl p-6 mb-8 text-white">
+            <h2 className="text-2xl font-bold mb-2">Total Marks Earned</h2>
+            <div className="text-4xl font-bold mb-2">
+              {marks.totalMarks} / {marks.maxPossibleMarks}
+            </div>
+            <p className="text-brand-100 text-sm">
+              UPSC Marking Scheme: +2 for correct, -⅓ for wrong
+            </p>
+          </div>
+
+          {/* Detailed Results Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1">
-                {correctAnswers}/{totalQuestions}
+            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl">
+              <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
+                {marks.correctCount}
               </div>
-              <div className="text-sm text-blue-600/70 dark:text-blue-400/70">Correct</div>
+              <div className="text-sm text-green-600/70 dark:text-green-400/70">Correct</div>
+              <div className="text-xs text-green-600/50 dark:text-green-400/50 mt-1">
+                +{marks.correctCount * 2} marks
+              </div>
             </div>
             
             <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-xl">
               <div className="text-2xl font-bold text-red-600 dark:text-red-400 mb-1">
-                {totalQuestions - correctAnswers}
+                {marks.wrongCount}
               </div>
               <div className="text-sm text-red-600/70 dark:text-red-400/70">Wrong</div>
+              <div className="text-xs text-red-600/50 dark:text-red-400/50 mt-1">
+                -{Math.round(marks.wrongCount * (1/3) * 100) / 100} marks
+              </div>
             </div>
             
-            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl">
-              <div className="text-2xl font-bold text-green-600 dark:text-green-400 mb-1">
-                {accuracy}%
+            <div className="bg-gray-50 dark:bg-gray-900/20 p-4 rounded-xl">
+              <div className="text-2xl font-bold text-gray-600 dark:text-gray-400 mb-1">
+                {marks.unattemptedCount}
               </div>
-              <div className="text-sm text-green-600/70 dark:text-green-400/70">Accuracy</div>
+              <div className="text-sm text-gray-600/70 dark:text-gray-400/70">Unattempted</div>
+              <div className="text-xs text-gray-600/50 dark:text-gray-400/50 mt-1">
+                0 marks
+              </div>
             </div>
             
             <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-xl">
               <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">
-                {formatTime(quizState.timeElapsed)}
+                {accuracy}%
               </div>
-              <div className="text-sm text-purple-600/70 dark:text-purple-400/70">Total Time</div>
+              <div className="text-sm text-purple-600/70 dark:text-purple-400/70">Accuracy</div>
+              <div className="text-xs text-purple-600/50 dark:text-purple-400/50 mt-1">
+                Attempted: {marks.correctCount + marks.wrongCount}
+              </div>
             </div>
           </div>
 
           {/* Performance Analysis */}
           <div className="bg-gray-50 dark:bg-navy-800 rounded-xl p-6 mb-8">
             <h3 className="text-lg font-semibold text-navy-700 dark:text-white mb-4">Performance Analysis</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
               <div>
-                <span className="text-gray-600 dark:text-gray-400">Average Time per Question:</span>
+                <span className="text-gray-600 dark:text-gray-400">Time per Question:</span>
                 <div className="font-semibold text-navy-700 dark:text-white">{avgTimePerQuestion}s</div>
+              </div>
+              <div>
+                <span className="text-gray-600 dark:text-gray-400">Total Time:</span>
+                <div className="font-semibold text-navy-700 dark:text-white">{formatTime(quizState.timeElapsed)}</div>
               </div>
               <div>
                 <span className="text-gray-600 dark:text-gray-400">Performance Level:</span>
                 <div className={`font-semibold ${
-                  accuracy >= 80 ? 'text-green-600' : 
-                  accuracy >= 60 ? 'text-yellow-600' : 'text-red-600'
+                  marks.totalMarks >= marks.maxPossibleMarks * 0.8 ? 'text-green-600' : 
+                  marks.totalMarks >= marks.maxPossibleMarks * 0.6 ? 'text-yellow-600' : 
+                  marks.totalMarks >= 0 ? 'text-orange-600' : 'text-red-600'
                 }`}>
-                  {accuracy >= 80 ? 'Excellent' : accuracy >= 60 ? 'Good' : 'Needs Improvement'}
+                  {marks.totalMarks >= marks.maxPossibleMarks * 0.8 ? 'Excellent' : 
+                   marks.totalMarks >= marks.maxPossibleMarks * 0.6 ? 'Good' : 
+                   marks.totalMarks >= 0 ? 'Average' : 'Needs Improvement'}
                 </div>
               </div>
               <div>
-                <span className="text-gray-600 dark:text-gray-400">Questions Attempted:</span>
+                <span className="text-gray-600 dark:text-gray-400">Efficiency:</span>
                 <div className="font-semibold text-navy-700 dark:text-white">
-                  {Object.keys(quizState.selectedAnswers).length}/{totalQuestions}
+                  {Math.round((marks.totalMarks / marks.maxPossibleMarks) * 100)}%
                 </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Marking Scheme Explanation */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 mb-8">
+            <h4 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">UPSC Marking Scheme</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-blue-700 dark:text-blue-300">
+              <div className="flex items-center gap-2">
+                <FiCheck className="h-4 w-4 text-green-500" />
+                <span>Correct Answer: +2 marks</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FiX className="h-4 w-4 text-red-500" />
+                <span>Wrong Answer: -⅓ marks</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <FiClock className="h-4 w-4 text-gray-500" />
+                <span>Unattempted: 0 marks</span>
               </div>
             </div>
           </div>
@@ -443,11 +562,7 @@ const MCQPracticePage = () => {
                   <span className="text-xs bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-2 py-1 rounded-full">
                     {currentQuestion.source}
                   </span>
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    currentQuestion.difficulty === 'Easy' ? 'bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400' :
-                    currentQuestion.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400' :
-                    'bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400'
-                  }`}>
+                  <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(currentQuestion.difficulty)}`}>
                     {currentQuestion.difficulty}
                   </span>
                 </div>
@@ -495,9 +610,15 @@ const MCQPracticePage = () => {
                       {quizState.showAnswer && (
                         <span className="flex-shrink-0">
                           {index === currentQuestion.correctAnswer ? (
-                            <FiCheck className="h-5 w-5 text-green-500" />
+                            <div className="flex items-center gap-1">
+                              <FiCheck className="h-5 w-5 text-green-500" />
+                              <span className="text-xs font-medium text-green-600">+2</span>
+                            </div>
                           ) : selectedAnswer === index ? (
-                            <FiX className="h-5 w-5 text-red-500" />
+                            <div className="flex items-center gap-1">
+                              <FiX className="h-5 w-5 text-red-500" />
+                              <span className="text-xs font-medium text-red-600">-⅓</span>
+                            </div>
                           ) : null}
                         </span>
                       )}
@@ -582,7 +703,7 @@ const MCQPracticePage = () => {
               MCQ Practice Generator
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Generate custom MCQ questions from your notes, topics, or current affairs
+              Generate custom MCQ questions with UPSC marking scheme (+2, -⅓)
             </p>
           </div>
         </div>
@@ -598,8 +719,8 @@ const MCQPracticePage = () => {
             <p className="text-xs text-green-600/70 dark:text-green-400/70">Questions</p>
           </div>
           <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-            <p className="text-lg font-bold text-purple-600 dark:text-purple-400">Instant</p>
-            <p className="text-xs text-purple-600/70 dark:text-purple-400/70">Generation</p>
+            <p className="text-lg font-bold text-purple-600 dark:text-purple-400">UPSC</p>
+            <p className="text-xs text-purple-600/70 dark:text-purple-400/70">Marking</p>
           </div>
         </div>
       </Card>
@@ -759,25 +880,54 @@ const MCQPracticePage = () => {
             )}
           </div>
 
-          {/* Question Count Selection */}
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Number of Questions
-            </label>
-            <div className="flex gap-2">
-              {questionCounts.map((count) => (
-                <button
-                  key={count}
-                  onClick={() => setQuestionCount(count)}
-                  className={`w-12 h-12 rounded-lg border-2 font-medium transition-all duration-200 ${
-                    questionCount === count
-                      ? 'border-brand-500 bg-brand-500 text-white'
-                      : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-brand-300'
-                  }`}
-                >
-                  {count}
-                </button>
-              ))}
+          {/* Question Settings */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            {/* Question Count Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Number of Questions
+              </label>
+              <div className="flex gap-2">
+                {questionCounts.map((count) => (
+                  <button
+                    key={count}
+                    onClick={() => setQuestionCount(count)}
+                    className={`w-12 h-12 rounded-lg border-2 font-medium transition-all duration-200 ${
+                      questionCount === count
+                        ? 'border-brand-500 bg-brand-500 text-white'
+                        : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-brand-300'
+                    }`}
+                  >
+                    {count}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Difficulty Level Selection */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                <MdTune className="h-4 w-4" />
+                Difficulty Level
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {difficultyLevels.map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => setDifficultyLevel(level)}
+                    className={`px-3 py-2 rounded-lg border-2 text-sm font-medium transition-all duration-200 ${
+                      difficultyLevel === level
+                        ? 'border-brand-500 bg-brand-500 text-white'
+                        : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-brand-300'
+                    }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Mixed includes all difficulty levels
+              </p>
             </div>
           </div>
 
@@ -796,7 +946,7 @@ const MCQPracticePage = () => {
               ) : (
                 <>
                   <MdLightbulb className="h-4 w-4" />
-                  Generate {questionCount} Question{questionCount > 1 ? 's' : ''}
+                  Generate {questionCount} Question{questionCount > 1 ? 's' : ''} ({difficultyLevel})
                 </>
               )}
             </button>
@@ -846,7 +996,7 @@ const MCQPracticePage = () => {
             </h2>
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
               <MdLightbulb className="h-4 w-4" />
-              AI Generated
+              AI Generated • {difficultyLevel} Level
             </div>
           </div>
 
@@ -866,11 +1016,7 @@ const MCQPracticePage = () => {
                         <span className="text-xs bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-2 py-1 rounded-full">
                           {question.source}
                         </span>
-                        <span className={`text-xs px-2 py-1 rounded-full ${
-                          question.difficulty === 'Easy' ? 'bg-green-100 text-green-600 dark:bg-green-900/20 dark:text-green-400' :
-                          question.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400' :
-                          'bg-red-100 text-red-600 dark:bg-red-900/20 dark:text-red-400'
-                        }`}>
+                        <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(question.difficulty)}`}>
                           {question.difficulty}
                         </span>
                       </div>
