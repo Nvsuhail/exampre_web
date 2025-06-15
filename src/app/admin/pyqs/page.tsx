@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Card from 'components/card';
-import { FiSearch, FiFilter, FiBookOpen, FiCalendar, FiTarget, FiClock, FiCheck, FiX, FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import { MdExpandMore, MdClose, MdTimer, MdQuiz } from 'react-icons/md';
+import { FiSearch, FiFilter, FiBookOpen, FiCalendar, FiTarget, FiClock, FiCheck, FiX, FiArrowLeft, FiArrowRight, FiEye, FiRefreshCw } from 'react-icons/fi';
+import { MdExpandMore, MdClose, MdTimer, MdQuiz, MdLightbulb } from 'react-icons/md';
 
 interface Subject {
   id: string;
@@ -29,6 +29,7 @@ interface QuizState {
   timeElapsed: number;
   isCompleted: boolean;
   startTime: Date | null;
+  isReviewing: boolean;
 }
 
 const PYQsPage = () => {
@@ -45,7 +46,8 @@ const PYQsPage = () => {
     showAnswer: false,
     timeElapsed: 0,
     isCompleted: false,
-    startTime: null
+    startTime: null,
+    isReviewing: false
   });
 
   const subjects: Subject[] = [
@@ -252,7 +254,8 @@ const PYQsPage = () => {
       showAnswer: false,
       timeElapsed: 0,
       isCompleted: false,
-      startTime: new Date()
+      startTime: new Date(),
+      isReviewing: false
     });
   };
 
@@ -277,7 +280,7 @@ const PYQsPage = () => {
       setQuizState(prev => ({
         ...prev,
         currentQuestionIndex: prev.currentQuestionIndex + 1,
-        showAnswer: false
+        showAnswer: quizState.isReviewing ? true : false
       }));
     }
   };
@@ -287,13 +290,23 @@ const PYQsPage = () => {
       setQuizState(prev => ({
         ...prev,
         currentQuestionIndex: prev.currentQuestionIndex - 1,
-        showAnswer: false
+        showAnswer: quizState.isReviewing ? true : false
       }));
     }
   };
 
   const submitQuiz = () => {
     setQuizState(prev => ({ ...prev, isCompleted: true }));
+  };
+
+  const startReview = () => {
+    setQuizState(prev => ({
+      ...prev,
+      currentQuestionIndex: 0,
+      showAnswer: true,
+      isReviewing: true,
+      isCompleted: false
+    }));
   };
 
   const exitQuiz = () => {
@@ -304,7 +317,8 @@ const PYQsPage = () => {
       showAnswer: false,
       timeElapsed: 0,
       isCompleted: false,
-      startTime: null
+      startTime: null,
+      isReviewing: false
     });
   };
 
@@ -403,8 +417,15 @@ const PYQsPage = () => {
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
+              onClick={startReview}
+              className="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              <FiEye className="h-4 w-4" />
+              Review Questions & Answers
+            </button>
+            <button
               onClick={exitQuiz}
-              className="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-medium transition-colors"
+              className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium transition-colors"
             >
               Back to Search
             </button>
@@ -416,11 +437,13 @@ const PYQsPage = () => {
                   showAnswer: false,
                   timeElapsed: 0,
                   isCompleted: false,
-                  startTime: new Date()
+                  startTime: new Date(),
+                  isReviewing: false
                 });
               }}
-              className="px-6 py-3 border border-brand-500 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-900/20 rounded-lg font-medium transition-colors"
+              className="px-6 py-3 border border-brand-500 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-900/20 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
             >
+              <FiRefreshCw className="h-4 w-4" />
               Retake Quiz
             </button>
           </div>
@@ -449,18 +472,25 @@ const PYQsPage = () => {
                 <div className="flex items-center gap-2">
                   <MdQuiz className="h-5 w-5 text-brand-500" />
                   <span className="font-medium text-navy-700 dark:text-white">
-                    Question {quizState.currentQuestionIndex + 1} of {searchResults.length}
+                    {quizState.isReviewing ? 'Review' : 'Question'} {quizState.currentQuestionIndex + 1} of {searchResults.length}
                   </span>
                 </div>
+                {quizState.isReviewing && (
+                  <span className="bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
+                    Review Mode
+                  </span>
+                )}
               </div>
               
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-xl">
-                  <MdTimer className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <span className="font-mono text-blue-600 dark:text-blue-400 font-medium">
-                    {formatTime(quizState.timeElapsed)}
-                  </span>
-                </div>
+                {!quizState.isReviewing && (
+                  <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-xl">
+                    <MdTimer className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <span className="font-mono text-blue-600 dark:text-blue-400 font-medium">
+                      {formatTime(quizState.timeElapsed)}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </Card>
@@ -543,7 +573,7 @@ const PYQsPage = () => {
               </div>
 
               {/* Show Answer Button */}
-              {selectedAnswer !== undefined && !quizState.showAnswer && (
+              {selectedAnswer !== undefined && !quizState.showAnswer && !quizState.isReviewing && (
                 <div className="mb-6">
                   <button
                     onClick={showAnswerKey}
@@ -557,7 +587,10 @@ const PYQsPage = () => {
               {/* Explanation */}
               {quizState.showAnswer && (
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-xl mb-6">
-                  <h3 className="font-semibold text-blue-700 dark:text-blue-300 mb-2">Explanation:</h3>
+                  <h3 className="font-semibold text-blue-700 dark:text-blue-300 mb-2 flex items-center gap-2">
+                    <MdLightbulb className="h-4 w-4" />
+                    Explanation:
+                  </h3>
                   <p className="text-blue-700 dark:text-blue-300 leading-relaxed">
                     {currentQuestion.explanation}
                   </p>
@@ -576,21 +609,40 @@ const PYQsPage = () => {
                 </button>
 
                 <div className="flex items-center gap-2">
-                  {quizState.currentQuestionIndex === searchResults.length - 1 ? (
-                    <button
-                      onClick={submitQuiz}
-                      className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
-                    >
-                      Submit Quiz
-                    </button>
+                  {quizState.isReviewing ? (
+                    quizState.currentQuestionIndex === searchResults.length - 1 ? (
+                      <button
+                        onClick={exitQuiz}
+                        className="px-6 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg font-medium transition-colors"
+                      >
+                        Finish Review
+                      </button>
+                    ) : (
+                      <button
+                        onClick={nextQuestion}
+                        className="flex items-center gap-2 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-colors"
+                      >
+                        Next
+                        <FiArrowRight className="h-4 w-4" />
+                      </button>
+                    )
                   ) : (
-                    <button
-                      onClick={nextQuestion}
-                      className="flex items-center gap-2 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-colors"
-                    >
-                      Next
-                      <FiArrowRight className="h-4 w-4" />
-                    </button>
+                    quizState.currentQuestionIndex === searchResults.length - 1 ? (
+                      <button
+                        onClick={submitQuiz}
+                        className="px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
+                      >
+                        Submit Quiz
+                      </button>
+                    ) : (
+                      <button
+                        onClick={nextQuestion}
+                        className="flex items-center gap-2 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white rounded-lg transition-colors"
+                      >
+                        Next
+                        <FiArrowRight className="h-4 w-4" />
+                      </button>
+                    )
                   )}
                 </div>
               </div>
