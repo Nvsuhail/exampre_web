@@ -1,31 +1,32 @@
 import Card from 'components/card';
+import { FiArrowRight, FiBookOpen } from 'react-icons/fi';
 
 const PrelimsHero = () => {
   return (
-    <div
-      className="flex w-full flex-col rounded-[20px] bg-cover px-[30px] py-[30px] md:px-[64px] md:py-[56px]"
-      style={{ 
-        background: 'linear-gradient(135deg, #4318FF 0%, #6366F1 100%)'
-      }}
-    >
-      <div className="w-full">
-        <h4 className="mb-[14px] max-w-full text-xl font-bold text-white md:w-[64%] md:text-3xl md:leading-[42px] lg:w-[46%] xl:w-[85%] 2xl:w-[75%] 3xl:w-[52%]">
-          Master UPSC Prelims 2025 with Smart Preparation Tools
-        </h4>
-        <p className="mb-[40px] max-w-full text-base font-medium text-[#E3DAFF] md:w-[64%] lg:w-[40%] xl:w-[72%] 2xl:w-[60%] 3xl:w-[45%]">
-          Comprehensive toolkit designed for effective UPSC Prelims preparation. Practice, analyze, and excel with our curated resources.
-        </p>
+    <Card extra="w-full p-8 md:p-12 bg-gradient-to-br from-brand-500 to-brand-600 border-0">
+      <div className="max-w-4xl">
+        <div className="mb-6">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+            UPSC Prelims 2025
+          </h1>
+          <p className="text-lg md:text-xl text-white/90 font-medium max-w-2xl">
+            Your complete preparation toolkit for UPSC Prelims success
+          </p>
+        </div>
 
-        <div className="mt-[36px] flex items-center justify-between gap-4 sm:justify-start 2xl:gap-10">
-          <button className="text-black linear rounded-xl bg-white px-4 py-2 text-center text-base font-medium transition duration-200 hover:!bg-white/80 active:!bg-white/70">
+        <div className="flex flex-col sm:flex-row gap-4 mt-8">
+          <button className="group flex items-center justify-center gap-3 bg-white text-brand-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/95 transition-all duration-200 hover:scale-105 shadow-lg">
+            <FiBookOpen className="h-5 w-5" />
             Preparation Guide
+            <FiArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </button>
-          <button className="text-base font-medium text-lightPrimary hover:text-lightPrimary 2xl:ml-2">
+          
+          <button className="flex items-center justify-center gap-3 border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/10 transition-all duration-200">
             View Syllabus
           </button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 
