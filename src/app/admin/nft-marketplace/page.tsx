@@ -7,65 +7,65 @@ const PrelimsPage = () => {
     {
       id: 1,
       title: 'Previous Year Questions',
-      description: 'Comprehensive collection of 45+ years UPSC Prelims questions with detailed explanations and trend analysis.',
+      description: 'Comprehensive collection of 45+ years UPSC Prelims questions with detailed explanations.',
       image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/pyqs'
     },
     {
       id: 2,
       title: 'MCQ Practice',
-      description: 'Daily adaptive practice sessions with instant feedback, difficulty progression, and personalized recommendations.',
+      description: 'Daily adaptive practice sessions with instant feedback and personalized recommendations.',
       image: 'https://images.pexels.com/photos/301926/pexels-photo-301926.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/mcq-practice'
     },
     {
       id: 3,
       title: 'Mock Tests',
-      description: 'Full-length tests simulating actual exam conditions with detailed performance analysis and ranking.',
+      description: 'Full-length tests simulating actual exam conditions with detailed performance analysis.',
       image: 'https://images.pexels.com/photos/6238297/pexels-photo-6238297.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/test-series'
     },
     {
       id: 4,
       title: 'Smart Notes',
-      description: 'Concise, exam-focused notes covering the entire syllabus with visual aids and memory techniques.',
+      description: 'Concise, exam-focused notes covering the entire syllabus with visual aids.',
       image: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/notes'
     },
     {
       id: 5,
       title: 'Flashcards',
-      description: 'AI-powered spaced repetition system for effective memorization of facts, dates, and concepts.',
+      description: 'AI-powered spaced repetition system for effective memorization of facts and concepts.',
       image: 'https://images.pexels.com/photos/6238302/pexels-photo-6238302.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/flashcards'
     },
     {
       id: 6,
       title: 'Trend Analysis',
-      description: 'Data-driven insights on question patterns, topic weightage, and emerging trends in UPSC Prelims.',
+      description: 'Data-driven insights on question patterns and emerging trends in UPSC Prelims.',
       image: 'https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/trends'
     }
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-8">
       {/* Hero Section */}
       <PrelimsHero />
 
       {/* Toolkit Section */}
-      <div className="space-y-8">
+      <div className="space-y-6">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-navy-700 dark:text-white mb-4">
-            Complete Preparation Toolkit
+          <h2 className="text-2xl font-bold text-navy-700 dark:text-white mb-3">
+            Preparation Toolkit
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Everything you need for UPSC Prelims success, organized and optimized for efficient learning
+          <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto text-sm">
+            Essential tools for UPSC Prelims success
           </p>
         </div>
 
         {/* Toolkit Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {toolkits.map((toolkit) => (
             <ToolkitCard
               key={toolkit.id}
