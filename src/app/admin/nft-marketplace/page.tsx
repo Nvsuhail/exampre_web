@@ -2,7 +2,8 @@
 import PrelimsHero from 'components/admin/prelims/PrelimsHero';
 import ToolkitCard from 'components/admin/prelims/ToolkitCard';
 import Card from 'components/card';
-import { FiBookOpen, FiTarget, FiTrendingUp, FiUsers, FiCalendar, FiBrain } from 'react-icons/fi';
+import { FiBookOpen, FiTarget, FiTrendingUp, FiUsers, FiCalendar } from 'react-icons/fi';
+import { FaBrain } from 'react-icons/fa';
 import { MdQuiz, MdLibraryBooks, MdAnalytics } from 'react-icons/md';
 
 const PrelimsPage = () => {
@@ -53,7 +54,7 @@ const PrelimsPage = () => {
 
   const features = [
     {
-      icon: <FiBrain className="h-6 w-6" />,
+      icon: <FaBrain className="h-6 w-6" />,
       title: 'AI-Powered Learning',
       description: 'Personalized study paths based on your performance'
     },
