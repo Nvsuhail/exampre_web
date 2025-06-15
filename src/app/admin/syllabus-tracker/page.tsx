@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Card from 'components/card';
-import { FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiBookOpen, FiTarget, FiClock, FiTrendingUp } from 'react-icons/fi';
+import { FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiBookOpen, FiTarget, FiTrendingUp } from 'react-icons/fi';
 import { MdCheckCircle, MdRadioButtonUnchecked, MdAccessTime, MdBook } from 'react-icons/md';
 
 interface Module {
@@ -9,8 +9,6 @@ interface Module {
   name: string;
   status: 'not-started' | 'in-progress' | 'completed' | 'revision';
   priority: 'high' | 'medium' | 'low';
-  estimatedHours: number;
-  completedHours: number;
   notes: string;
   dateAdded: string;
   lastUpdated: string;
@@ -22,8 +20,7 @@ interface Subject {
   modules: Module[];
   totalModules: number;
   completedModules: number;
-  totalHours: number;
-  completedHours: number;
+  revisionModules: number;
 }
 
 const SyllabusTrackerPage = () => {
@@ -43,8 +40,6 @@ const SyllabusTrackerPage = () => {
           name: 'Ancient India - Indus Valley Civilization',
           status: 'completed',
           priority: 'high',
-          estimatedHours: 15,
-          completedHours: 15,
           notes: 'Completed with NCERT and additional sources',
           dateAdded: '2024-01-15',
           lastUpdated: '2024-01-20'
@@ -54,8 +49,6 @@ const SyllabusTrackerPage = () => {
           name: 'Vedic Period and Early Kingdoms',
           status: 'in-progress',
           priority: 'high',
-          estimatedHours: 20,
-          completedHours: 12,
           notes: 'Need to complete Mauryan Empire section',
           dateAdded: '2024-01-21',
           lastUpdated: '2024-01-25'
@@ -63,8 +56,7 @@ const SyllabusTrackerPage = () => {
       ],
       totalModules: 2,
       completedModules: 1,
-      totalHours: 35,
-      completedHours: 27
+      revisionModules: 0
     },
     {
       id: 'geography',
@@ -75,8 +67,6 @@ const SyllabusTrackerPage = () => {
           name: 'Physical Geography - Earth and Universe',
           status: 'not-started',
           priority: 'medium',
-          estimatedHours: 18,
-          completedHours: 0,
           notes: '',
           dateAdded: '2024-01-10',
           lastUpdated: '2024-01-10'
@@ -84,8 +74,7 @@ const SyllabusTrackerPage = () => {
       ],
       totalModules: 1,
       completedModules: 0,
-      totalHours: 18,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'polity',
@@ -93,8 +82,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'economics',
@@ -102,8 +90,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'environment',
@@ -111,8 +98,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'science',
@@ -120,8 +106,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     }
   ]);
 
@@ -132,8 +117,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'gs2',
@@ -141,8 +125,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'gs3',
@@ -150,8 +133,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'gs4',
@@ -159,8 +141,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'essay',
@@ -168,8 +149,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     },
     {
       id: 'optional',
@@ -177,8 +157,7 @@ const SyllabusTrackerPage = () => {
       modules: [],
       totalModules: 0,
       completedModules: 0,
-      totalHours: 0,
-      completedHours: 0
+      revisionModules: 0
     }
   ]);
 
@@ -186,8 +165,6 @@ const SyllabusTrackerPage = () => {
     name: '',
     status: 'not-started',
     priority: 'medium',
-    estimatedHours: 10,
-    completedHours: 0,
     notes: ''
   });
 
@@ -228,8 +205,6 @@ const SyllabusTrackerPage = () => {
       name: newModule.name,
       status: newModule.status || 'not-started',
       priority: newModule.priority || 'medium',
-      estimatedHours: newModule.estimatedHours || 10,
-      completedHours: newModule.completedHours || 0,
       notes: newModule.notes || '',
       dateAdded: new Date().toISOString().split('T')[0],
       lastUpdated: new Date().toISOString().split('T')[0]
@@ -243,8 +218,7 @@ const SyllabusTrackerPage = () => {
           modules: updatedModules,
           totalModules: updatedModules.length,
           completedModules: updatedModules.filter(m => m.status === 'completed').length,
-          totalHours: updatedModules.reduce((sum, m) => sum + m.estimatedHours, 0),
-          completedHours: updatedModules.reduce((sum, m) => sum + m.completedHours, 0)
+          revisionModules: updatedModules.filter(m => m.status === 'revision').length
         };
       }
       return subject;
@@ -255,8 +229,6 @@ const SyllabusTrackerPage = () => {
       name: '',
       status: 'not-started',
       priority: 'medium',
-      estimatedHours: 10,
-      completedHours: 0,
       notes: ''
     });
     setShowAddModule(false);
@@ -268,15 +240,11 @@ const SyllabusTrackerPage = () => {
       if (subject.id === subjectId) {
         const updatedModules = subject.modules.map(module => {
           if (module.id === moduleId) {
-            const updatedModule = {
+            return {
               ...module,
               status: newStatus as any,
               lastUpdated: new Date().toISOString().split('T')[0]
             };
-            if (newStatus === 'completed' && module.completedHours < module.estimatedHours) {
-              updatedModule.completedHours = module.estimatedHours;
-            }
-            return updatedModule;
           }
           return module;
         });
@@ -284,7 +252,7 @@ const SyllabusTrackerPage = () => {
           ...subject,
           modules: updatedModules,
           completedModules: updatedModules.filter(m => m.status === 'completed').length,
-          completedHours: updatedModules.reduce((sum, m) => sum + m.completedHours, 0)
+          revisionModules: updatedModules.filter(m => m.status === 'revision').length
         };
       }
       return subject;
@@ -302,8 +270,7 @@ const SyllabusTrackerPage = () => {
           modules: updatedModules,
           totalModules: updatedModules.length,
           completedModules: updatedModules.filter(m => m.status === 'completed').length,
-          totalHours: updatedModules.reduce((sum, m) => sum + m.estimatedHours, 0),
-          completedHours: updatedModules.reduce((sum, m) => sum + m.completedHours, 0)
+          revisionModules: updatedModules.filter(m => m.status === 'revision').length
         };
       }
       return subject;
@@ -312,23 +279,21 @@ const SyllabusTrackerPage = () => {
     setCurrentSubjects(updatedSubjects);
   };
 
-  const calculateOverallProgress = () => {
+  const calculateProgress = () => {
     const totalModules = currentSubjects.reduce((sum, subject) => sum + subject.totalModules, 0);
     const completedModules = currentSubjects.reduce((sum, subject) => sum + subject.completedModules, 0);
-    const totalHours = currentSubjects.reduce((sum, subject) => sum + subject.totalHours, 0);
-    const completedHours = currentSubjects.reduce((sum, subject) => sum + subject.completedHours, 0);
+    const revisionModules = currentSubjects.reduce((sum, subject) => sum + subject.revisionModules, 0);
 
     return {
-      moduleProgress: totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0,
-      hourProgress: totalHours > 0 ? Math.round((completedHours / totalHours) * 100) : 0,
+      subjectProgress: totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0,
+      revisionProgress: totalModules > 0 ? Math.round((revisionModules / totalModules) * 100) : 0,
       totalModules,
       completedModules,
-      totalHours,
-      completedHours
+      revisionModules
     };
   };
 
-  const overallProgress = calculateOverallProgress();
+  const progress = calculateProgress();
 
   return (
     <div className="space-y-6">
@@ -388,63 +353,70 @@ const SyllabusTrackerPage = () => {
         </div>
       </Card>
 
-      {/* Overall Progress */}
-      <Card extra="p-6">
-        <h2 className="text-xl font-bold text-navy-700 dark:text-white mb-4 flex items-center gap-2">
-          <FiTrendingUp className="h-5 w-5 text-brand-500" />
-          Overall Progress - {activeTab === 'prelims' ? 'Prelims' : 'Mains'}
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-blue-600 dark:text-blue-400">Modules</span>
-              <FiBookOpen className="h-4 w-4 text-blue-500" />
+      {/* Progress Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Subject Progress */}
+        <Card extra="p-6">
+          <h2 className="text-xl font-bold text-navy-700 dark:text-white mb-4 flex items-center gap-2">
+            <FiTarget className="h-5 w-5 text-brand-500" />
+            Subject Progress
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Completed Modules</span>
+              <span className="text-sm font-medium text-brand-500">{progress.subjectProgress}%</span>
             </div>
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-              {overallProgress.completedModules}/{overallProgress.totalModules}
+            <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
+              <div 
+                className="bg-gradient-to-r from-brand-500 to-brand-400 h-3 rounded-full transition-all duration-500"
+                style={{ width: `${progress.subjectProgress}%` }}
+              ></div>
             </div>
-            <div className="text-xs text-blue-600/70 dark:text-blue-400/70">
-              {overallProgress.moduleProgress}% Complete
-            </div>
-          </div>
-          <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-green-600 dark:text-green-400">Hours</span>
-              <FiClock className="h-4 w-4 text-green-500" />
-            </div>
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-              {overallProgress.completedHours}/{overallProgress.totalHours}
-            </div>
-            <div className="text-xs text-green-600/70 dark:text-green-400/70">
-              {overallProgress.hourProgress}% Complete
-            </div>
-          </div>
-          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-purple-600 dark:text-purple-400">Subjects</span>
-              <FiTarget className="h-4 w-4 text-purple-500" />
-            </div>
-            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-              {currentSubjects.filter(s => s.completedModules > 0).length}/{currentSubjects.length}
-            </div>
-            <div className="text-xs text-purple-600/70 dark:text-purple-400/70">
-              Started
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-navy-700 dark:text-white">{progress.completedModules}</div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">Completed</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-navy-700 dark:text-white">{progress.totalModules}</div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">Total Modules</div>
+              </div>
             </div>
           </div>
-          <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-orange-600 dark:text-orange-400">Avg Progress</span>
-              <FiTrendingUp className="h-4 w-4 text-orange-500" />
+        </Card>
+
+        {/* Revision Progress */}
+        <Card extra="p-6">
+          <h2 className="text-xl font-bold text-navy-700 dark:text-white mb-4 flex items-center gap-2">
+            <FiTrendingUp className="h-5 w-5 text-purple-500" />
+            Revision Progress
+          </h2>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Modules in Revision</span>
+              <span className="text-sm font-medium text-purple-500">{progress.revisionProgress}%</span>
             </div>
-            <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
-              {Math.round((overallProgress.moduleProgress + overallProgress.hourProgress) / 2)}%
+            <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
+              <div 
+                className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full transition-all duration-500"
+                style={{ width: `${progress.revisionProgress}%` }}
+              ></div>
             </div>
-            <div className="text-xs text-orange-600/70 dark:text-orange-400/70">
-              Overall
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-navy-700 dark:text-white">{progress.revisionModules}</div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">In Revision</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-navy-700 dark:text-white">
+                  {progress.totalModules - progress.completedModules - progress.revisionModules}
+                </div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">Pending</div>
+              </div>
             </div>
           </div>
-        </div>
-      </Card>
+        </Card>
+      </div>
 
       {/* Subjects and Modules */}
       <div className="space-y-6">
@@ -460,7 +432,7 @@ const SyllabusTrackerPage = () => {
                   <span>•</span>
                   <span>{subject.completedModules} completed</span>
                   <span>•</span>
-                  <span>{subject.completedHours}/{subject.totalHours} hours</span>
+                  <span>{subject.revisionModules} in revision</span>
                 </div>
               </div>
               <button
@@ -513,7 +485,7 @@ const SyllabusTrackerPage = () => {
                           </span>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-3 text-sm">
                           <div>
                             <span className="text-gray-600 dark:text-gray-400">Priority:</span>
                             <span className={`ml-1 font-medium ${
@@ -521,12 +493,6 @@ const SyllabusTrackerPage = () => {
                               module.priority === 'medium' ? 'text-yellow-600' : 'text-green-600'
                             }`}>
                               {module.priority}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-gray-600 dark:text-gray-400">Hours:</span>
-                            <span className="ml-1 font-medium text-navy-700 dark:text-white">
-                              {module.completedHours}/{module.estimatedHours}
                             </span>
                           </div>
                           <div>
@@ -632,34 +598,19 @@ const SyllabusTrackerPage = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Priority
-                  </label>
-                  <select
-                    value={newModule.priority}
-                    onChange={(e) => setNewModule({...newModule, priority: e.target.value as any})}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
-                  >
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Estimated Hours
-                  </label>
-                  <input
-                    type="number"
-                    value={newModule.estimatedHours}
-                    onChange={(e) => setNewModule({...newModule, estimatedHours: parseInt(e.target.value)})}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
-                    min="1"
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Priority
+                </label>
+                <select
+                  value={newModule.priority}
+                  onChange={(e) => setNewModule({...newModule, priority: e.target.value as any})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
               </div>
 
               <div>
@@ -692,8 +643,6 @@ const SyllabusTrackerPage = () => {
                     name: '',
                     status: 'not-started',
                     priority: 'medium',
-                    estimatedHours: 10,
-                    completedHours: 0,
                     notes: ''
                   });
                 }}
