@@ -433,41 +433,43 @@ const PYQsPage = () => {
   if (quizMode && currentQuestion) {
     return (
       <div className="min-h-screen flex flex-col">
-        {/* Quiz Header - Fixed with rounded corners */}
-        <div className="bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-gray-700 p-4 flex-shrink-0 rounded-t-xl mx-2 mt-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={exitQuiz}
-                className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-brand-500 transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <FiArrowLeft className="h-4 w-4" />
-                Exit Quiz
-              </button>
-              <div className="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
-              <div className="flex items-center gap-2">
-                <MdQuiz className="h-5 w-5 text-brand-500" />
-                <span className="font-medium text-navy-700 dark:text-white">
-                  Question {quizState.currentQuestionIndex + 1} of {searchResults.length}
-                </span>
+        {/* Quiz Header - Completely rounded like bottom quiz box */}
+        <div className="m-4 mb-0">
+          <Card extra="p-4 border-b-0 rounded-b-none">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={exitQuiz}
+                  className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-brand-500 transition-colors px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <FiArrowLeft className="h-4 w-4" />
+                  Exit Quiz
+                </button>
+                <div className="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
+                <div className="flex items-center gap-2">
+                  <MdQuiz className="h-5 w-5 text-brand-500" />
+                  <span className="font-medium text-navy-700 dark:text-white">
+                    Question {quizState.currentQuestionIndex + 1} of {searchResults.length}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-xl">
+                  <MdTimer className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  <span className="font-mono text-blue-600 dark:text-blue-400 font-medium">
+                    {formatTime(quizState.timeElapsed)}
+                  </span>
+                </div>
               </div>
             </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-xl">
-                <MdTimer className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                <span className="font-mono text-blue-600 dark:text-blue-400 font-medium">
-                  {formatTime(quizState.timeElapsed)}
-                </span>
-              </div>
-            </div>
-          </div>
+          </Card>
         </div>
 
         {/* Quiz Content - Scrollable */}
-        <div className="flex-1 p-6 overflow-y-auto">
+        <div className="flex-1 px-4 pb-4 overflow-y-auto">
           <div className="max-w-4xl mx-auto">
-            <Card extra="p-8">
+            <Card extra="p-8 rounded-t-none">
               {/* Question Header */}
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex items-center gap-2">
@@ -635,212 +637,261 @@ const PYQsPage = () => {
         </div>
       </Card>
 
-      {/* Search Filters */}
-      <Card extra="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-navy-700 dark:text-white flex items-center gap-2">
-            <FiFilter className="h-4 w-4" />
-            Search Filters
-          </h2>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="md:hidden flex items-center gap-1 text-brand-500 text-sm"
-            >
+      {/* Search Filters - Only show when no search results */}
+      {searchResults.length === 0 && (
+        <Card extra="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-navy-700 dark:text-white flex items-center gap-2">
               <FiFilter className="h-4 w-4" />
-              {showFilters ? 'Hide' : 'Show'}
-            </button>
-            <button
-              onClick={clearFilters}
-              className="text-gray-500 hover:text-red-500 text-sm flex items-center gap-1"
-            >
-              <MdClose className="h-4 w-4" />
-              Clear
-            </button>
-          </div>
-        </div>
-
-        <div className={`space-y-4 ${showFilters ? 'block' : 'hidden md:block'}`}>
-          {/* Subject Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Select Subject *
-            </label>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
-              {subjects.map((subject) => (
-                <button
-                  key={subject.id}
-                  onClick={() => handleSubjectChange(subject.id)}
-                  className={`p-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
-                    selectedSubject === subject.id
-                      ? 'bg-brand-500 text-white border-brand-500 shadow-lg'
-                      : 'bg-white dark:bg-navy-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-brand-300 hover:bg-brand-50 dark:hover:bg-brand-900/20'
-                  }`}
-                >
-                  {subject.name}
-                </button>
-              ))}
+              Search Filters
+            </h2>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="md:hidden flex items-center gap-1 text-brand-500 text-sm"
+              >
+                <FiFilter className="h-4 w-4" />
+                {showFilters ? 'Hide' : 'Show'}
+              </button>
+              <button
+                onClick={clearFilters}
+                className="text-gray-500 hover:text-red-500 text-sm flex items-center gap-1"
+              >
+                <MdClose className="h-4 w-4" />
+                Clear
+              </button>
             </div>
           </div>
 
-          {/* Subtopics Selection */}
-          {selectedSubjectData && (
+          <div className={`space-y-4 ${showFilters ? 'block' : 'hidden md:block'}`}>
+            {/* Subject Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Select Subtopics (Optional)
+                Select Subject *
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                {selectedSubjectData.subtopics.map((subtopic) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+                {subjects.map((subject) => (
                   <button
-                    key={subtopic}
-                    onClick={() => handleSubtopicToggle(subtopic)}
-                    className={`p-2 rounded-lg border text-xs font-medium transition-all duration-200 ${
-                      selectedSubtopics.includes(subtopic)
-                        ? 'bg-brand-100 text-brand-700 border-brand-300 dark:bg-brand-900/30 dark:text-brand-300'
-                        : 'bg-white dark:bg-navy-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-brand-200 hover:bg-brand-25'
+                    key={subject.id}
+                    onClick={() => handleSubjectChange(subject.id)}
+                    className={`p-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
+                      selectedSubject === subject.id
+                        ? 'bg-brand-500 text-white border-brand-500 shadow-lg'
+                        : 'bg-white dark:bg-navy-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-brand-300 hover:bg-brand-50 dark:hover:bg-brand-900/20'
                     }`}
                   >
-                    {subtopic}
+                    {subject.name}
                   </button>
                 ))}
               </div>
-              {selectedSubtopics.length > 0 && (
-                <p className="text-xs text-brand-600 dark:text-brand-400 mt-2">
-                  {selectedSubtopics.length} subtopic(s) selected
-                </p>
-              )}
             </div>
-          )}
 
-          {/* Improved Year Range */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-              Year Range
-            </label>
-            <div className="bg-gray-50 dark:bg-navy-800 p-4 rounded-xl">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm text-gray-600 dark:text-gray-400">From {yearRange.from} to {yearRange.to}</span>
-                <span className="text-xs bg-brand-100 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 px-2 py-1 rounded-full">
-                  {yearRange.to - yearRange.from + 1} years
-                </span>
+            {/* Subtopics Selection */}
+            {selectedSubjectData && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Select Subtopics (Optional)
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  {selectedSubjectData.subtopics.map((subtopic) => (
+                    <button
+                      key={subtopic}
+                      onClick={() => handleSubtopicToggle(subtopic)}
+                      className={`p-2 rounded-lg border text-xs font-medium transition-all duration-200 ${
+                        selectedSubtopics.includes(subtopic)
+                          ? 'bg-brand-100 text-brand-700 border-brand-300 dark:bg-brand-900/30 dark:text-brand-300'
+                          : 'bg-white dark:bg-navy-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-brand-200 hover:bg-brand-25'
+                      }`}
+                    >
+                      {subtopic}
+                    </button>
+                  ))}
+                </div>
+                {selectedSubtopics.length > 0 && (
+                  <p className="text-xs text-brand-600 dark:text-brand-400 mt-2">
+                    {selectedSubtopics.length} subtopic(s) selected
+                  </p>
+                )}
               </div>
-              
-              {/* Year Range Slider */}
-              <div className="relative">
-                <div className="flex items-center gap-4">
-                  <div className="flex-1">
-                    <input
-                      type="range"
-                      min="2000"
-                      max="2024"
-                      value={yearRange.from}
-                      onChange={(e) => {
-                        const newFrom = parseInt(e.target.value);
-                        if (newFrom <= yearRange.to) {
-                          setYearRange(prev => ({ ...prev, from: newFrom }));
-                        }
-                      }}
-                      className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-                    />
-                    <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-                      <span>2000</span>
-                      <span>2024</span>
-                    </div>
-                  </div>
+            )}
+
+            {/* Enhanced Year Range with Dual Handle */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Year Range
+              </label>
+              <div className="bg-gray-50 dark:bg-navy-800 p-6 rounded-xl">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">From {yearRange.from} to {yearRange.to}</span>
+                  <span className="text-xs bg-brand-100 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 px-3 py-1 rounded-full font-medium">
+                    {yearRange.to - yearRange.from + 1} years
+                  </span>
                 </div>
                 
-                <div className="flex items-center gap-4 mt-4">
-                  <div className="flex items-center gap-2">
-                    <FiCalendar className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">From:</span>
-                    <div className="bg-white dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 min-w-[80px] text-center">
-                      <span className="text-sm font-medium text-navy-700 dark:text-white">{yearRange.from}</span>
+                {/* Dual Range Slider */}
+                <div className="relative mb-6">
+                  <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                    {/* Active range track */}
+                    <div 
+                      className="absolute h-2 bg-brand-500 rounded-full"
+                      style={{
+                        left: `${((yearRange.from - 2000) / (2024 - 2000)) * 100}%`,
+                        width: `${((yearRange.to - yearRange.from) / (2024 - 2000)) * 100}%`
+                      }}
+                    />
+                  </div>
+                  
+                  {/* From slider */}
+                  <input
+                    type="range"
+                    min="2000"
+                    max="2024"
+                    value={yearRange.from}
+                    onChange={(e) => {
+                      const newFrom = parseInt(e.target.value);
+                      if (newFrom <= yearRange.to) {
+                        setYearRange(prev => ({ ...prev, from: newFrom }));
+                      }
+                    }}
+                    className="absolute top-0 w-full h-2 bg-transparent appearance-none cursor-pointer slider pointer-events-none"
+                    style={{ pointerEvents: 'auto' }}
+                  />
+                  
+                  {/* To slider */}
+                  <input
+                    type="range"
+                    min="2000"
+                    max="2024"
+                    value={yearRange.to}
+                    onChange={(e) => {
+                      const newTo = parseInt(e.target.value);
+                      if (newTo >= yearRange.from) {
+                        setYearRange(prev => ({ ...prev, to: newTo }));
+                      }
+                    }}
+                    className="absolute top-0 w-full h-2 bg-transparent appearance-none cursor-pointer slider pointer-events-none"
+                    style={{ pointerEvents: 'auto' }}
+                  />
+                </div>
+                
+                {/* Year inputs */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">From Year</label>
+                    <div className="relative">
+                      <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        type="number"
+                        min="2000"
+                        max="2024"
+                        value={yearRange.from}
+                        onChange={(e) => {
+                          const newFrom = parseInt(e.target.value);
+                          if (newFrom >= 2000 && newFrom <= yearRange.to) {
+                            setYearRange(prev => ({ ...prev, from: newFrom }));
+                          }
+                        }}
+                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-navy-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                      />
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600 dark:text-gray-400">To:</span>
-                    <div className="bg-white dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 min-w-[80px] text-center">
-                      <span className="text-sm font-medium text-navy-700 dark:text-white">{yearRange.to}</span>
+                  <div>
+                    <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">To Year</label>
+                    <div className="relative">
+                      <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <input
+                        type="number"
+                        min="2000"
+                        max="2024"
+                        value={yearRange.to}
+                        onChange={(e) => {
+                          const newTo = parseInt(e.target.value);
+                          if (newTo <= 2024 && newTo >= yearRange.from) {
+                            setYearRange(prev => ({ ...prev, to: newTo }));
+                          }
+                        }}
+                        className="w-full pl-10 pr-4 py-3 bg-white dark:bg-navy-900 border border-gray-200 dark:border-gray-700 rounded-lg text-sm font-medium text-navy-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+                      />
                     </div>
                   </div>
                 </div>
                 
                 {/* Quick Year Presets */}
-                <div className="flex gap-2 mt-3">
+                <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => setYearRange({ from: 2020, to: 2024 })}
-                    className="text-xs px-3 py-1 bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-full hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors"
+                    className="text-xs px-3 py-2 bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors font-medium"
                   >
                     Last 5 years
                   </button>
                   <button
                     onClick={() => setYearRange({ from: 2015, to: 2024 })}
-                    className="text-xs px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-full hover:bg-green-200 dark:hover:bg-green-900/40 transition-colors"
+                    className="text-xs px-3 py-2 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/40 transition-colors font-medium"
                   >
                     Last 10 years
                   </button>
                   <button
                     onClick={() => setYearRange({ from: 2000, to: 2024 })}
-                    className="text-xs px-3 py-1 bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-full hover:bg-purple-200 dark:hover:bg-purple-900/40 transition-colors"
+                    className="text-xs px-3 py-2 bg-purple-100 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/40 transition-colors font-medium"
                   >
                     All years
                   </button>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Search Button */}
-          <div className="pt-2 flex gap-3">
-            <button
-              onClick={handleSearch}
-              disabled={!selectedSubject || isSearching}
-              className="flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:cursor-not-allowed"
-            >
-              {isSearching ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  Searching...
-                </>
-              ) : (
-                <>
-                  <FiSearch className="h-4 w-4" />
-                  Search Questions
-                </>
-              )}
-            </button>
-            
-            {searchResults.length > 0 && (
+            {/* Search Button */}
+            <div className="pt-2">
               <button
-                onClick={startQuiz}
-                className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                onClick={handleSearch}
+                disabled={!selectedSubject || isSearching}
+                className="w-full flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 disabled:bg-gray-300 dark:disabled:bg-gray-600 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:cursor-not-allowed"
               >
-                <MdQuiz className="h-4 w-4" />
-                Start Quiz ({searchResults.length} Questions)
+                {isSearching ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Searching...
+                  </>
+                ) : (
+                  <>
+                    <FiSearch className="h-4 w-4" />
+                    Search Questions
+                  </>
+                )}
               </button>
-            )}
+            </div>
           </div>
-        </div>
-      </Card>
-
-      {/* Search Another Topic Button - Only shown when quiz results exist */}
-      {searchResults.length > 0 && !quizMode && (
-        <div className="text-center">
-          <button
-            onClick={() => {
-              setSearchResults([]);
-              setSelectedSubject('');
-              setSelectedSubtopics([]);
-            }}
-            className="inline-flex items-center gap-2 text-brand-500 hover:text-brand-600 font-medium text-sm px-4 py-2 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-colors"
-          >
-            <FiSearch className="h-4 w-4" />
-            Search Another Topic
-          </button>
-        </div>
+        </Card>
       )}
 
-      {/* Search Results */}
+      {/* Action Buttons - Only shown when search results exist */}
+      {searchResults.length > 0 && !quizMode && (
+        <Card extra="p-4">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onClick={startQuiz}
+              className="flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              <MdQuiz className="h-4 w-4" />
+              Start Quiz ({searchResults.length} Questions)
+            </button>
+            
+            <button
+              onClick={() => {
+                setSearchResults([]);
+                setSelectedSubject('');
+                setSelectedSubtopics([]);
+              }}
+              className="flex items-center justify-center gap-2 border border-brand-500 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-900/20 px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              <FiSearch className="h-4 w-4" />
+              Search Another Topic
+            </button>
+          </div>
+        </Card>
+      )}
+
+      {/* Search Results - Without Answer Keys */}
       {searchResults.length > 0 && !quizMode && (
         <Card extra="p-6">
           <div className="flex items-center justify-between mb-4">
@@ -888,25 +939,15 @@ const PYQsPage = () => {
                   {question.question}
                 </h3>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {question.options.map((option, optIndex) => (
                     <div
                       key={optIndex}
-                      className={`p-2 rounded-lg border text-sm ${
-                        optIndex === question.correctAnswer
-                          ? 'bg-green-50 border-green-200 text-green-700 dark:bg-green-900/20 dark:border-green-700 dark:text-green-300'
-                          : 'bg-gray-50 border-gray-200 text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300'
-                      }`}
+                      className="p-3 rounded-lg border bg-gray-50 border-gray-200 text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 text-sm"
                     >
                       <span className="font-medium">{String.fromCharCode(65 + optIndex)}.</span> {option}
                     </div>
                   ))}
-                </div>
-
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-                  <p className="text-sm text-blue-700 dark:text-blue-300">
-                    <span className="font-medium">Explanation:</span> {question.explanation}
-                  </p>
                 </div>
               </div>
             ))}
