@@ -311,10 +311,10 @@ const SyllabusTrackerPage = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold text-navy-700 dark:text-white mb-2">
-              UPSC Syllabus Tracker
+              UPSC Syllabus Tracker - Prelims & Mains
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Track your preparation progress for Prelims and Mains
+              Track your preparation progress for both Prelims and Mains syllabus
             </p>
           </div>
           <button
@@ -332,23 +332,23 @@ const SyllabusTrackerPage = () => {
         <div className="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
           <button
             onClick={() => setActiveTab('prelims')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'prelims'
                 ? 'bg-white dark:bg-navy-700 text-brand-600 dark:text-brand-400 shadow-sm'
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
             }`}
           >
-            Prelims Syllabus
+            📚 Prelims Syllabus
           </button>
           <button
             onClick={() => setActiveTab('mains')}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 px-4 rounded-md text-sm font-medium transition-colors ${
               activeTab === 'mains'
                 ? 'bg-white dark:bg-navy-700 text-brand-600 dark:text-brand-400 shadow-sm'
                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
             }`}
           >
-            Mains Syllabus
+            📝 Mains Syllabus
           </button>
         </div>
       </Card>
