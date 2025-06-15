@@ -1,101 +1,200 @@
 'use client';
 import { useState } from 'react';
 import Card from 'components/card';
-import { FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiBookOpen, FiTarget, FiTrendingUp, FiFilter } from 'react-icons/fi';
-import { MdCheckCircle, MdRadioButtonUnchecked, MdAccessTime, MdBook, MdSort } from 'react-icons/md';
+import { FiArrowLeft, FiPlus, FiEdit2, FiTrash2, FiBookOpen, FiTarget, FiTrendingUp, FiFilter, FiChevronDown, FiChevronRight } from 'react-icons/fi';
+import { MdCheckCircle, MdRadioButtonUnchecked, MdAccessTime, MdBook, MdSort, MdExpandMore, MdExpandLess } from 'react-icons/md';
 
-interface Module {
+interface Subtopic {
   id: string;
   name: string;
-  category: 'Prelims' | 'Mains' | 'Both';
-  subject: string;
   status: 'not-started' | 'in-progress' | 'completed' | 'revision';
   priority: 'high' | 'medium' | 'low';
   notes: string;
   dateAdded: string;
   lastUpdated: string;
+  estimatedHours?: number;
+  actualHours?: number;
+}
+
+interface Subject {
+  id: string;
+  name: string;
+  category: 'Prelims' | 'Mains' | 'Both';
+  description: string;
+  subtopics: Subtopic[];
+  isExpanded: boolean;
+  totalTopics: number;
+  completedTopics: number;
 }
 
 const SyllabusTrackerPage = () => {
-  const [showAddModule, setShowAddModule] = useState(false);
-  const [editingModule, setEditingModule] = useState<Module | null>(null);
+  const [showAddSubject, setShowAddSubject] = useState(false);
+  const [showAddSubtopic, setShowAddSubtopic] = useState<string | null>(null);
+  const [editingSubtopic, setEditingSubtopic] = useState<{ subjectId: string; subtopic: Subtopic } | null>(null);
   const [filterCategory, setFilterCategory] = useState<'All' | 'Prelims' | 'Mains' | 'Both'>('All');
   const [filterStatus, setFilterStatus] = useState<'All' | 'not-started' | 'in-progress' | 'completed' | 'revision'>('All');
-  const [sortBy, setSortBy] = useState<'name' | 'category' | 'status' | 'priority' | 'dateAdded'>('dateAdded');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
-  // Unified modules data
-  const [modules, setModules] = useState<Module[]>([
+  // Sample subjects data with subtopics
+  const [subjects, setSubjects] = useState<Subject[]>([
     {
       id: '1',
-      name: 'Ancient India - Indus Valley Civilization',
+      name: 'History',
       category: 'Both',
-      subject: 'History',
-      status: 'completed',
-      priority: 'high',
-      notes: 'Completed with NCERT and additional sources',
-      dateAdded: '2024-01-15',
-      lastUpdated: '2024-01-20'
+      description: 'Ancient, Medieval, and Modern Indian History',
+      isExpanded: true,
+      totalTopics: 0,
+      completedTopics: 0,
+      subtopics: [
+        {
+          id: '1-1',
+          name: 'Indus Valley Civilization',
+          status: 'completed',
+          priority: 'high',
+          notes: 'Completed with NCERT and additional sources',
+          dateAdded: '2024-01-15',
+          lastUpdated: '2024-01-20',
+          estimatedHours: 8,
+          actualHours: 10
+        },
+        {
+          id: '1-2',
+          name: 'Vedic Period',
+          status: 'in-progress',
+          priority: 'high',
+          notes: 'Need to complete Rig Vedic period',
+          dateAdded: '2024-01-21',
+          lastUpdated: '2024-01-25',
+          estimatedHours: 12,
+          actualHours: 6
+        },
+        {
+          id: '1-3',
+          name: 'Mauryan Empire',
+          status: 'not-started',
+          priority: 'medium',
+          notes: '',
+          dateAdded: '2024-01-10',
+          lastUpdated: '2024-01-10',
+          estimatedHours: 10
+        },
+        {
+          id: '1-4',
+          name: 'Gupta Period',
+          status: 'revision',
+          priority: 'high',
+          notes: 'Golden age topics important for both prelims and mains',
+          dateAdded: '2024-01-08',
+          lastUpdated: '2024-01-24',
+          estimatedHours: 8,
+          actualHours: 8
+        }
+      ]
     },
     {
       id: '2',
-      name: 'Vedic Period and Early Kingdoms',
-      category: 'Both',
-      subject: 'History',
-      status: 'in-progress',
-      priority: 'high',
-      notes: 'Need to complete Mauryan Empire section',
-      dateAdded: '2024-01-21',
-      lastUpdated: '2024-01-25'
+      name: 'Geography',
+      category: 'Prelims',
+      description: 'Physical and Human Geography',
+      isExpanded: false,
+      totalTopics: 0,
+      completedTopics: 0,
+      subtopics: [
+        {
+          id: '2-1',
+          name: 'Earth and Universe',
+          status: 'not-started',
+          priority: 'medium',
+          notes: '',
+          dateAdded: '2024-01-10',
+          lastUpdated: '2024-01-10',
+          estimatedHours: 6
+        },
+        {
+          id: '2-2',
+          name: 'Atmosphere',
+          status: 'in-progress',
+          priority: 'high',
+          notes: 'Focus on weather and climate patterns',
+          dateAdded: '2024-01-12',
+          lastUpdated: '2024-01-22',
+          estimatedHours: 8,
+          actualHours: 4
+        },
+        {
+          id: '2-3',
+          name: 'Hydrosphere',
+          status: 'completed',
+          priority: 'medium',
+          notes: 'Ocean currents and water cycle completed',
+          dateAdded: '2024-01-05',
+          lastUpdated: '2024-01-18',
+          estimatedHours: 6,
+          actualHours: 7
+        }
+      ]
     },
     {
       id: '3',
-      name: 'Physical Geography - Earth and Universe',
-      category: 'Prelims',
-      subject: 'Geography',
-      status: 'not-started',
-      priority: 'medium',
-      notes: '',
-      dateAdded: '2024-01-10',
-      lastUpdated: '2024-01-10'
-    },
-    {
-      id: '4',
-      name: 'Essay Writing Techniques',
+      name: 'Essay Writing',
       category: 'Mains',
-      subject: 'Essay',
-      status: 'in-progress',
-      priority: 'high',
-      notes: 'Practice different essay formats',
-      dateAdded: '2024-01-12',
-      lastUpdated: '2024-01-22'
-    },
-    {
-      id: '5',
-      name: 'Constitutional Framework',
-      category: 'Both',
-      subject: 'Polity',
-      status: 'revision',
-      priority: 'high',
-      notes: 'Important for both prelims and mains',
-      dateAdded: '2024-01-08',
-      lastUpdated: '2024-01-24'
+      description: 'Essay writing techniques and practice',
+      isExpanded: false,
+      totalTopics: 0,
+      completedTopics: 0,
+      subtopics: [
+        {
+          id: '3-1',
+          name: 'Essay Structure and Format',
+          status: 'completed',
+          priority: 'high',
+          notes: 'Introduction, body, conclusion format mastered',
+          dateAdded: '2024-01-01',
+          lastUpdated: '2024-01-15',
+          estimatedHours: 4,
+          actualHours: 5
+        },
+        {
+          id: '3-2',
+          name: 'Philosophical Essays',
+          status: 'in-progress',
+          priority: 'high',
+          notes: 'Practice different philosophical themes',
+          dateAdded: '2024-01-12',
+          lastUpdated: '2024-01-22',
+          estimatedHours: 15,
+          actualHours: 8
+        }
+      ]
     }
   ]);
 
-  const [newModule, setNewModule] = useState<Partial<Module>>({
+  const [newSubject, setNewSubject] = useState({
     name: '',
-    category: 'Both',
-    subject: '',
-    status: 'not-started',
-    priority: 'medium',
-    notes: ''
+    category: 'Both' as 'Prelims' | 'Mains' | 'Both',
+    description: ''
   });
 
-  const subjects = [
-    'History', 'Geography', 'Polity', 'Economics', 'Environment', 'Science & Technology',
-    'Current Affairs', 'Ethics', 'Essay', 'Optional Subject', 'General Studies'
-  ];
+  const [newSubtopic, setNewSubtopic] = useState<Partial<Subtopic>>({
+    name: '',
+    status: 'not-started',
+    priority: 'medium',
+    notes: '',
+    estimatedHours: 0
+  });
+
+  // Update subject totals
+  const updateSubjectTotals = (subjectId: string) => {
+    setSubjects(prevSubjects => 
+      prevSubjects.map(subject => {
+        if (subject.id === subjectId) {
+          const totalTopics = subject.subtopics.length;
+          const completedTopics = subject.subtopics.filter(st => st.status === 'completed').length;
+          return { ...subject, totalTopics, completedTopics };
+        }
+        return subject;
+      })
+    );
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -132,95 +231,135 @@ const SyllabusTrackerPage = () => {
     }
   };
 
-  const addModule = () => {
-    if (!newModule.name || !newModule.subject) return;
+  const addSubject = () => {
+    if (!newSubject.name) return;
 
-    const moduleToAdd: Module = {
+    const subjectToAdd: Subject = {
       id: Date.now().toString(),
-      name: newModule.name,
-      category: newModule.category || 'Both',
-      subject: newModule.subject,
-      status: newModule.status || 'not-started',
-      priority: newModule.priority || 'medium',
-      notes: newModule.notes || '',
-      dateAdded: new Date().toISOString().split('T')[0],
-      lastUpdated: new Date().toISOString().split('T')[0]
+      name: newSubject.name,
+      category: newSubject.category,
+      description: newSubject.description,
+      subtopics: [],
+      isExpanded: true,
+      totalTopics: 0,
+      completedTopics: 0
     };
 
-    setModules([...modules, moduleToAdd]);
-    setNewModule({
-      name: '',
-      category: 'Both',
-      subject: '',
-      status: 'not-started',
-      priority: 'medium',
-      notes: ''
-    });
-    setShowAddModule(false);
+    setSubjects([...subjects, subjectToAdd]);
+    setNewSubject({ name: '', category: 'Both', description: '' });
+    setShowAddSubject(false);
   };
 
-  const updateModule = (moduleId: string, updates: Partial<Module>) => {
-    setModules(modules.map(module => {
-      if (module.id === moduleId) {
-        return {
-          ...module,
-          ...updates,
-          lastUpdated: new Date().toISOString().split('T')[0]
-        };
-      }
-      return module;
-    }));
+  const addSubtopic = (subjectId: string) => {
+    if (!newSubtopic.name) return;
+
+    const subtopicToAdd: Subtopic = {
+      id: `${subjectId}-${Date.now()}`,
+      name: newSubtopic.name!,
+      status: newSubtopic.status || 'not-started',
+      priority: newSubtopic.priority || 'medium',
+      notes: newSubtopic.notes || '',
+      dateAdded: new Date().toISOString().split('T')[0],
+      lastUpdated: new Date().toISOString().split('T')[0],
+      estimatedHours: newSubtopic.estimatedHours || 0
+    };
+
+    setSubjects(prevSubjects =>
+      prevSubjects.map(subject => {
+        if (subject.id === subjectId) {
+          const updatedSubject = {
+            ...subject,
+            subtopics: [...subject.subtopics, subtopicToAdd]
+          };
+          return updatedSubject;
+        }
+        return subject;
+      })
+    );
+
+    updateSubjectTotals(subjectId);
+    setNewSubtopic({ name: '', status: 'not-started', priority: 'medium', notes: '', estimatedHours: 0 });
+    setShowAddSubtopic(null);
   };
 
-  const deleteModule = (moduleId: string) => {
-    setModules(modules.filter(module => module.id !== moduleId));
+  const updateSubtopic = (subjectId: string, subtopicId: string, updates: Partial<Subtopic>) => {
+    setSubjects(prevSubjects =>
+      prevSubjects.map(subject => {
+        if (subject.id === subjectId) {
+          return {
+            ...subject,
+            subtopics: subject.subtopics.map(subtopic => {
+              if (subtopic.id === subtopicId) {
+                return {
+                  ...subtopic,
+                  ...updates,
+                  lastUpdated: new Date().toISOString().split('T')[0]
+                };
+              }
+              return subtopic;
+            })
+          };
+        }
+        return subject;
+      })
+    );
+    updateSubjectTotals(subjectId);
   };
 
-  const filteredAndSortedModules = modules
-    .filter(module => {
-      if (filterCategory !== 'All' && module.category !== filterCategory) return false;
-      if (filterStatus !== 'All' && module.status !== filterStatus) return false;
-      return true;
-    })
-    .sort((a, b) => {
-      let aValue = a[sortBy];
-      let bValue = b[sortBy];
-      
-      if (sortBy === 'priority') {
-        const priorityOrder = { 'high': 3, 'medium': 2, 'low': 1 };
-        aValue = priorityOrder[a.priority as keyof typeof priorityOrder];
-        bValue = priorityOrder[b.priority as keyof typeof priorityOrder];
-      }
-      
-      if (sortOrder === 'asc') {
-        return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
-      }
-    });
+  const deleteSubtopic = (subjectId: string, subtopicId: string) => {
+    setSubjects(prevSubjects =>
+      prevSubjects.map(subject => {
+        if (subject.id === subjectId) {
+          return {
+            ...subject,
+            subtopics: subject.subtopics.filter(subtopic => subtopic.id !== subtopicId)
+          };
+        }
+        return subject;
+      })
+    );
+    updateSubjectTotals(subjectId);
+  };
 
-  const calculateProgress = () => {
-    const totalModules = modules.length;
-    const completedModules = modules.filter(m => m.status === 'completed').length;
-    const revisionModules = modules.filter(m => m.status === 'revision').length;
-    const inProgressModules = modules.filter(m => m.status === 'in-progress').length;
+  const toggleSubjectExpansion = (subjectId: string) => {
+    setSubjects(prevSubjects =>
+      prevSubjects.map(subject => {
+        if (subject.id === subjectId) {
+          return { ...subject, isExpanded: !subject.isExpanded };
+        }
+        return subject;
+      })
+    );
+  };
 
-    const prelimsModules = modules.filter(m => m.category === 'Prelims' || m.category === 'Both');
-    const mainsModules = modules.filter(m => m.category === 'Mains' || m.category === 'Both');
+  const filteredSubjects = subjects.filter(subject => {
+    if (filterCategory !== 'All' && subject.category !== filterCategory) return false;
+    return true;
+  });
+
+  const calculateOverallProgress = () => {
+    const allSubtopics = subjects.flatMap(subject => subject.subtopics);
+    const totalSubtopics = allSubtopics.length;
+    const completedSubtopics = allSubtopics.filter(st => st.status === 'completed').length;
+    const revisionSubtopics = allSubtopics.filter(st => st.status === 'revision').length;
+    const inProgressSubtopics = allSubtopics.filter(st => st.status === 'in-progress').length;
+
+    const prelimsSubjects = subjects.filter(s => s.category === 'Prelims' || s.category === 'Both');
+    const mainsSubjects = subjects.filter(s => s.category === 'Mains' || s.category === 'Both');
 
     return {
-      subjectProgress: totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0,
-      revisionProgress: totalModules > 0 ? Math.round((revisionModules / totalModules) * 100) : 0,
-      totalModules,
-      completedModules,
-      revisionModules,
-      inProgressModules,
-      prelimsCount: prelimsModules.length,
-      mainsCount: mainsModules.length
+      subjectProgress: totalSubtopics > 0 ? Math.round((completedSubtopics / totalSubtopics) * 100) : 0,
+      revisionProgress: totalSubtopics > 0 ? Math.round((revisionSubtopics / totalSubtopics) * 100) : 0,
+      totalSubtopics,
+      completedSubtopics,
+      revisionSubtopics,
+      inProgressSubtopics,
+      prelimsCount: prelimsSubjects.length,
+      mainsCount: mainsSubjects.length
     };
   };
 
-  const progress = calculateProgress();
+  const progress = calculateOverallProgress();
 
   return (
     <div className="space-y-6">
@@ -241,22 +380,22 @@ const SyllabusTrackerPage = () => {
               UPSC Syllabus Tracker
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Unified tracking for Prelims and Mains preparation
+              Subject-wise detailed tracking for comprehensive preparation
             </p>
           </div>
           <button
-            onClick={() => setShowAddModule(true)}
+            onClick={() => setShowAddSubject(true)}
             className="flex items-center gap-2 bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors"
           >
             <FiPlus className="h-4 w-4" />
-            Add Module
+            Add Subject
           </button>
         </div>
       </Card>
 
       {/* Progress Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Subject Progress */}
+        {/* Overall Progress */}
         <Card extra="p-6">
           <h3 className="text-lg font-bold text-navy-700 dark:text-white mb-4 flex items-center gap-2">
             <FiTarget className="h-5 w-5 text-brand-500" />
@@ -267,15 +406,15 @@ const SyllabusTrackerPage = () => {
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Completed</span>
               <span className="text-sm font-medium text-brand-500">{progress.subjectProgress}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+            <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
               <div 
-                className="bg-gradient-to-r from-brand-500 to-brand-400 h-2 rounded-full transition-all duration-500"
+                className="bg-gradient-to-r from-brand-500 to-brand-400 h-3 rounded-full transition-all duration-500"
                 style={{ width: `${progress.subjectProgress}%` }}
               ></div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-navy-700 dark:text-white">{progress.completedModules}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">of {progress.totalModules} modules</div>
+              <div className="text-2xl font-bold text-navy-700 dark:text-white">{progress.completedSubtopics}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">of {progress.totalSubtopics} topics</div>
             </div>
           </div>
         </Card>
@@ -291,216 +430,259 @@ const SyllabusTrackerPage = () => {
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">In Revision</span>
               <span className="text-sm font-medium text-purple-500">{progress.revisionProgress}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+            <div className="w-full bg-gray-200 rounded-full h-3 dark:bg-gray-700">
               <div 
-                className="bg-gradient-to-r from-purple-500 to-purple-400 h-2 rounded-full transition-all duration-500"
+                className="bg-gradient-to-r from-purple-500 to-purple-400 h-3 rounded-full transition-all duration-500"
                 style={{ width: `${progress.revisionProgress}%` }}
               ></div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-navy-700 dark:text-white">{progress.revisionModules}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">modules</div>
+              <div className="text-2xl font-bold text-navy-700 dark:text-white">{progress.revisionSubtopics}</div>
+              <div className="text-xs text-gray-600 dark:text-gray-400">topics</div>
             </div>
           </div>
         </Card>
 
-        {/* Prelims Count */}
+        {/* Prelims Subjects */}
         <Card extra="p-6">
           <h3 className="text-lg font-bold text-navy-700 dark:text-white mb-4 flex items-center gap-2">
             <FiBookOpen className="h-5 w-5 text-blue-500" />
-            Prelims
+            Prelims Subjects
           </h3>
           <div className="text-center">
             <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">{progress.prelimsCount}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">modules</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">subjects</div>
           </div>
         </Card>
 
-        {/* Mains Count */}
+        {/* Mains Subjects */}
         <Card extra="p-6">
           <h3 className="text-lg font-bold text-navy-700 dark:text-white mb-4 flex items-center gap-2">
             <FiBookOpen className="h-5 w-5 text-orange-500" />
-            Mains
+            Mains Subjects
           </h3>
           <div className="text-center">
             <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2">{progress.mainsCount}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">modules</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">subjects</div>
           </div>
         </Card>
       </div>
 
-      {/* Filters and Controls */}
+      {/* Filters */}
       <Card extra="p-6">
-        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-          <div className="flex flex-wrap gap-4">
-            {/* Category Filter */}
-            <div className="flex items-center gap-2">
-              <FiFilter className="h-4 w-4 text-gray-500" />
-              <select
-                value={filterCategory}
-                onChange={(e) => setFilterCategory(e.target.value as any)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white text-sm"
-              >
-                <option value="All">All Categories</option>
-                <option value="Prelims">Prelims Only</option>
-                <option value="Mains">Mains Only</option>
-                <option value="Both">Both</option>
-              </select>
-            </div>
-
-            {/* Status Filter */}
-            <div>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white text-sm"
-              >
-                <option value="All">All Status</option>
-                <option value="not-started">Not Started</option>
-                <option value="in-progress">In Progress</option>
-                <option value="completed">Completed</option>
-                <option value="revision">Revision</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Sort Controls */}
+        <div className="flex flex-wrap gap-4 items-center">
           <div className="flex items-center gap-2">
-            <MdSort className="h-4 w-4 text-gray-500" />
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white text-sm"
-            >
-              <option value="dateAdded">Date Added</option>
-              <option value="name">Name</option>
-              <option value="category">Category</option>
-              <option value="status">Status</option>
-              <option value="priority">Priority</option>
-            </select>
-            <button
-              onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            >
-              {sortOrder === 'asc' ? '↑' : '↓'}
-            </button>
+            <FiFilter className="h-4 w-4 text-gray-500" />
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filter by:</span>
           </div>
+          <select
+            value={filterCategory}
+            onChange={(e) => setFilterCategory(e.target.value as any)}
+            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white text-sm"
+          >
+            <option value="All">All Categories</option>
+            <option value="Prelims">Prelims Only</option>
+            <option value="Mains">Mains Only</option>
+            <option value="Both">Both</option>
+          </select>
         </div>
       </Card>
 
-      {/* Modules Table */}
-      <Card extra="p-6">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Module</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Category</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Subject</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Status</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Priority</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Updated</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700 dark:text-gray-300">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredAndSortedModules.length > 0 ? (
-                filteredAndSortedModules.map((module) => (
-                  <tr key={module.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        {getStatusIcon(module.status)}
-                        <div>
-                          <div className="font-medium text-navy-700 dark:text-white">{module.name}</div>
-                          {module.notes && (
-                            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 max-w-xs truncate">
-                              {module.notes}
-                            </div>
-                          )}
-                        </div>
+      {/* Subjects with Subtopics */}
+      <div className="space-y-6">
+        {filteredSubjects.length > 0 ? (
+          filteredSubjects.map((subject) => (
+            <Card key={subject.id} extra="overflow-hidden">
+              {/* Subject Header */}
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => toggleSubjectExpansion(subject.id)}
+                      className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    >
+                      {subject.isExpanded ? (
+                        <MdExpandLess className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                      ) : (
+                        <MdExpandMore className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                      )}
+                    </button>
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <h2 className="text-xl font-bold text-navy-700 dark:text-white">
+                          {subject.name}
+                        </h2>
+                        <span className={`px-3 py-1 text-sm font-medium rounded-full ${getCategoryColor(subject.category)}`}>
+                          {subject.category}
+                        </span>
                       </div>
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${getCategoryColor(module.category)}`}>
-                        {module.category}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className="text-sm font-medium text-navy-700 dark:text-white">{module.subject}</span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <select
-                        value={module.status}
-                        onChange={(e) => updateModule(module.id, { status: e.target.value as any })}
-                        className={`px-2 py-1 text-xs font-medium rounded-full border-0 cursor-pointer ${getStatusColor(module.status)}`}
-                      >
-                        <option value="not-started">Not Started</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="completed">Completed</option>
-                        <option value="revision">Revision</option>
-                      </select>
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className={`text-sm font-medium ${getPriorityColor(module.priority)}`}>
-                        {module.priority.charAt(0).toUpperCase() + module.priority.slice(1)}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {new Date(module.lastUpdated).toLocaleDateString()}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => setEditingModule(module)}
-                          className="p-2 text-gray-400 hover:text-brand-500 transition-colors"
-                        >
-                          <FiEdit2 className="h-4 w-4" />
-                        </button>
-                        <button
-                          onClick={() => deleteModule(module.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-                        >
-                          <FiTrash2 className="h-4 w-4" />
-                        </button>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm">{subject.description}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-right">
+                      <div className="text-sm text-gray-600 dark:text-gray-400">Progress</div>
+                      <div className="text-lg font-bold text-navy-700 dark:text-white">
+                        {subject.totalTopics > 0 ? Math.round((subject.completedTopics / subject.totalTopics) * 100) : 0}%
                       </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={7} className="py-12 text-center">
-                    <FiBookOpen className="h-12 w-12 mx-auto mb-3 opacity-50 text-gray-400" />
-                    <p className="text-gray-500 dark:text-gray-400">No modules found</p>
-                    <p className="text-sm text-gray-400 dark:text-gray-500">Add modules to start tracking your progress</p>
-                  </td>
-                </tr>
+                      <div className="text-xs text-gray-500">
+                        {subject.completedTopics}/{subject.totalTopics} topics
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setShowAddSubtopic(subject.id)}
+                      className="flex items-center gap-2 bg-brand-500 text-white px-3 py-2 rounded-lg hover:bg-brand-600 transition-colors text-sm"
+                    >
+                      <FiPlus className="h-4 w-4" />
+                      Add Topic
+                    </button>
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="mt-4">
+                  <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                    <div 
+                      className="bg-gradient-to-r from-brand-500 to-brand-400 h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${subject.totalTopics > 0 ? (subject.completedTopics / subject.totalTopics) * 100 : 0}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Subtopics Table */}
+              {subject.isExpanded && (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 dark:bg-gray-800">
+                      <tr>
+                        <th className="text-left py-3 px-6 font-semibold text-gray-700 dark:text-gray-300 text-sm">Topic</th>
+                        <th className="text-left py-3 px-6 font-semibold text-gray-700 dark:text-gray-300 text-sm">Status</th>
+                        <th className="text-left py-3 px-6 font-semibold text-gray-700 dark:text-gray-300 text-sm">Priority</th>
+                        <th className="text-left py-3 px-6 font-semibold text-gray-700 dark:text-gray-300 text-sm">Hours</th>
+                        <th className="text-left py-3 px-6 font-semibold text-gray-700 dark:text-gray-300 text-sm">Updated</th>
+                        <th className="text-left py-3 px-6 font-semibold text-gray-700 dark:text-gray-300 text-sm">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {subject.subtopics.length > 0 ? (
+                        subject.subtopics.map((subtopic) => (
+                          <tr key={subtopic.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                            <td className="py-4 px-6">
+                              <div className="flex items-center gap-3">
+                                {getStatusIcon(subtopic.status)}
+                                <div>
+                                  <div className="font-medium text-navy-700 dark:text-white">{subtopic.name}</div>
+                                  {subtopic.notes && (
+                                    <div className="text-sm text-gray-600 dark:text-gray-400 mt-1 max-w-xs">
+                                      {subtopic.notes}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-4 px-6">
+                              <select
+                                value={subtopic.status}
+                                onChange={(e) => updateSubtopic(subject.id, subtopic.id, { status: e.target.value as any })}
+                                className={`px-3 py-1 text-xs font-medium rounded-full border-0 cursor-pointer ${getStatusColor(subtopic.status)}`}
+                              >
+                                <option value="not-started">Not Started</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                                <option value="revision">Revision</option>
+                              </select>
+                            </td>
+                            <td className="py-4 px-6">
+                              <span className={`text-sm font-medium ${getPriorityColor(subtopic.priority)}`}>
+                                {subtopic.priority.charAt(0).toUpperCase() + subtopic.priority.slice(1)}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6">
+                              <div className="text-sm">
+                                <div className="text-navy-700 dark:text-white">
+                                  {subtopic.actualHours || 0}/{subtopic.estimatedHours || 0}h
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {subtopic.estimatedHours && subtopic.actualHours 
+                                    ? `${Math.round((subtopic.actualHours / subtopic.estimatedHours) * 100)}%`
+                                    : 'Not tracked'
+                                  }
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-4 px-6">
+                              <span className="text-sm text-gray-600 dark:text-gray-400">
+                                {new Date(subtopic.lastUpdated).toLocaleDateString()}
+                              </span>
+                            </td>
+                            <td className="py-4 px-6">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => setEditingSubtopic({ subjectId: subject.id, subtopic })}
+                                  className="p-2 text-gray-400 hover:text-brand-500 transition-colors"
+                                >
+                                  <FiEdit2 className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => deleteSubtopic(subject.id, subtopic.id)}
+                                  className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                                >
+                                  <FiTrash2 className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={6} className="py-12 text-center">
+                            <FiBookOpen className="h-8 w-8 mx-auto mb-3 opacity-50 text-gray-400" />
+                            <p className="text-gray-500 dark:text-gray-400">No topics added yet</p>
+                            <p className="text-sm text-gray-400 dark:text-gray-500">Add topics to start tracking your progress</p>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
               )}
-            </tbody>
-          </table>
-        </div>
-      </Card>
+            </Card>
+          ))
+        ) : (
+          <Card extra="p-12 text-center">
+            <FiBookOpen className="h-16 w-16 mx-auto mb-4 opacity-50 text-gray-400" />
+            <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">No subjects found</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">Add subjects to start organizing your syllabus</p>
+            <button
+              onClick={() => setShowAddSubject(true)}
+              className="bg-brand-500 text-white px-6 py-3 rounded-lg hover:bg-brand-600 transition-colors"
+            >
+              Add Your First Subject
+            </button>
+          </Card>
+        )}
+      </div>
 
-      {/* Add Module Modal */}
-      {showAddModule && (
+      {/* Add Subject Modal */}
+      {showAddSubject && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-navy-800 rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-navy-800 rounded-xl p-6 w-full max-w-md">
             <h3 className="text-lg font-bold text-navy-700 dark:text-white mb-4">
-              Add New Module
+              Add New Subject
             </h3>
             
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Module Name *
+                  Subject Name *
                 </label>
                 <input
                   type="text"
-                  value={newModule.name}
-                  onChange={(e) => setNewModule({...newModule, name: e.target.value})}
+                  value={newSubject.name}
+                  onChange={(e) => setNewSubject({...newSubject, name: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
-                  placeholder="Enter module name"
+                  placeholder="e.g., History, Geography, Polity"
                 />
               </div>
 
@@ -509,8 +691,8 @@ const SyllabusTrackerPage = () => {
                   Category *
                 </label>
                 <select
-                  value={newModule.category}
-                  onChange={(e) => setNewModule({...newModule, category: e.target.value as any})}
+                  value={newSubject.category}
+                  onChange={(e) => setNewSubject({...newSubject, category: e.target.value as any})}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
                 >
                   <option value="Prelims">Prelims Only</option>
@@ -521,70 +703,30 @@ const SyllabusTrackerPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Subject *
-                </label>
-                <select
-                  value={newModule.subject}
-                  onChange={(e) => setNewModule({...newModule, subject: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
-                >
-                  <option value="">Select Subject</option>
-                  {subjects.map((subject) => (
-                    <option key={subject} value={subject}>
-                      {subject}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Priority
-                </label>
-                <select
-                  value={newModule.priority}
-                  onChange={(e) => setNewModule({...newModule, priority: e.target.value as any})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
-                >
-                  <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high">High</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Notes (Optional)
+                  Description
                 </label>
                 <textarea
-                  value={newModule.notes}
-                  onChange={(e) => setNewModule({...newModule, notes: e.target.value})}
+                  value={newSubject.description}
+                  onChange={(e) => setNewSubject({...newSubject, description: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
                   rows={3}
-                  placeholder="Add any notes or study plan"
+                  placeholder="Brief description of the subject"
                 />
               </div>
             </div>
 
             <div className="flex gap-3 mt-6">
               <button
-                onClick={addModule}
-                disabled={!newModule.name || !newModule.subject}
+                onClick={addSubject}
+                disabled={!newSubject.name}
                 className="flex-1 bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Add Module
+                Add Subject
               </button>
               <button
                 onClick={() => {
-                  setShowAddModule(false);
-                  setNewModule({
-                    name: '',
-                    category: 'Both',
-                    subject: '',
-                    status: 'not-started',
-                    priority: 'medium',
-                    notes: ''
-                  });
+                  setShowAddSubject(false);
+                  setNewSubject({ name: '', category: 'Both', description: '' });
                 }}
                 className="flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
@@ -595,57 +737,26 @@ const SyllabusTrackerPage = () => {
         </div>
       )}
 
-      {/* Edit Module Modal */}
-      {editingModule && (
+      {/* Add Subtopic Modal */}
+      {showAddSubtopic && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-navy-800 rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-bold text-navy-700 dark:text-white mb-4">
-              Edit Module
+              Add New Topic
             </h3>
             
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Module Name *
+                  Topic Name *
                 </label>
                 <input
                   type="text"
-                  value={editingModule.name}
-                  onChange={(e) => setEditingModule({...editingModule, name: e.target.value})}
+                  value={newSubtopic.name}
+                  onChange={(e) => setNewSubtopic({...newSubtopic, name: e.target.value})}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
+                  placeholder="Enter topic name"
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Category *
-                </label>
-                <select
-                  value={editingModule.category}
-                  onChange={(e) => setEditingModule({...editingModule, category: e.target.value as any})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
-                >
-                  <option value="Prelims">Prelims Only</option>
-                  <option value="Mains">Mains Only</option>
-                  <option value="Both">Both Prelims & Mains</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                  Subject *
-                </label>
-                <select
-                  value={editingModule.subject}
-                  onChange={(e) => setEditingModule({...editingModule, subject: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
-                >
-                  {subjects.map((subject) => (
-                    <option key={subject} value={subject}>
-                      {subject}
-                    </option>
-                  ))}
-                </select>
               </div>
 
               <div>
@@ -653,8 +764,8 @@ const SyllabusTrackerPage = () => {
                   Priority
                 </label>
                 <select
-                  value={editingModule.priority}
-                  onChange={(e) => setEditingModule({...editingModule, priority: e.target.value as any})}
+                  value={newSubtopic.priority}
+                  onChange={(e) => setNewSubtopic({...newSubtopic, priority: e.target.value as any})}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
                 >
                   <option value="low">Low</option>
@@ -665,11 +776,138 @@ const SyllabusTrackerPage = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Estimated Hours
+                </label>
+                <input
+                  type="number"
+                  value={newSubtopic.estimatedHours}
+                  onChange={(e) => setNewSubtopic({...newSubtopic, estimatedHours: parseInt(e.target.value) || 0})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Notes (Optional)
+                </label>
+                <textarea
+                  value={newSubtopic.notes}
+                  onChange={(e) => setNewSubtopic({...newSubtopic, notes: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
+                  rows={3}
+                  placeholder="Add any notes or study plan"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => addSubtopic(showAddSubtopic)}
+                disabled={!newSubtopic.name}
+                className="flex-1 bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Add Topic
+              </button>
+              <button
+                onClick={() => {
+                  setShowAddSubtopic(null);
+                  setNewSubtopic({ name: '', status: 'not-started', priority: 'medium', notes: '', estimatedHours: 0 });
+                }}
+                className="flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Subtopic Modal */}
+      {editingSubtopic && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-navy-800 rounded-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <h3 className="text-lg font-bold text-navy-700 dark:text-white mb-4">
+              Edit Topic
+            </h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Topic Name *
+                </label>
+                <input
+                  type="text"
+                  value={editingSubtopic.subtopic.name}
+                  onChange={(e) => setEditingSubtopic({
+                    ...editingSubtopic,
+                    subtopic: { ...editingSubtopic.subtopic, name: e.target.value }
+                  })}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Priority
+                </label>
+                <select
+                  value={editingSubtopic.subtopic.priority}
+                  onChange={(e) => setEditingSubtopic({
+                    ...editingSubtopic,
+                    subtopic: { ...editingSubtopic.subtopic, priority: e.target.value as any }
+                  })}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
+                >
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Estimated Hours
+                </label>
+                <input
+                  type="number"
+                  value={editingSubtopic.subtopic.estimatedHours}
+                  onChange={(e) => setEditingSubtopic({
+                    ...editingSubtopic,
+                    subtopic: { ...editingSubtopic.subtopic, estimatedHours: parseInt(e.target.value) || 0 }
+                  })}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Actual Hours
+                </label>
+                <input
+                  type="number"
+                  value={editingSubtopic.subtopic.actualHours || 0}
+                  onChange={(e) => setEditingSubtopic({
+                    ...editingSubtopic,
+                    subtopic: { ...editingSubtopic.subtopic, actualHours: parseInt(e.target.value) || 0 }
+                  })}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
+                  min="0"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                   Notes
                 </label>
                 <textarea
-                  value={editingModule.notes}
-                  onChange={(e) => setEditingModule({...editingModule, notes: e.target.value})}
+                  value={editingSubtopic.subtopic.notes}
+                  onChange={(e) => setEditingSubtopic({
+                    ...editingSubtopic,
+                    subtopic: { ...editingSubtopic.subtopic, notes: e.target.value }
+                  })}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-navy-700 text-navy-700 dark:text-white"
                   rows={3}
                 />
@@ -679,15 +917,15 @@ const SyllabusTrackerPage = () => {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => {
-                  updateModule(editingModule.id, editingModule);
-                  setEditingModule(null);
+                  updateSubtopic(editingSubtopic.subjectId, editingSubtopic.subtopic.id, editingSubtopic.subtopic);
+                  setEditingSubtopic(null);
                 }}
                 className="flex-1 bg-brand-500 text-white px-4 py-2 rounded-lg hover:bg-brand-600 transition-colors"
               >
                 Save Changes
               </button>
               <button
-                onClick={() => setEditingModule(null)}
+                onClick={() => setEditingSubtopic(null)}
                 className="flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
                 Cancel
