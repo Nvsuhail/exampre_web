@@ -48,20 +48,27 @@ const PrelimsPage = () => {
     },
     {
       id: 7,
+      title: 'History Visuals Maker',
+      description: 'Generate stunning AI-powered visual representations of any historical event.',
+      image: 'https://images.pexels.com/photos/2166711/pexels-photo-2166711.jpeg?auto=compress&cs=tinysrgb&w=800',
+      link: '/admin/history-visuals-maker'
+    },
+    {
+      id: 8,
       title: 'Mock Tests',
       description: 'Full-length tests simulating actual exam conditions with detailed performance analysis.',
       image: 'https://images.pexels.com/photos/6238297/pexels-photo-6238297.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/test-series'
     },
     {
-      id: 8,
+      id: 9,
       title: 'Smart Notes',
       description: 'Concise, exam-focused notes covering the entire syllabus with visual aids.',
       image: 'https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg?auto=compress&cs=tinysrgb&w=800',
       link: '/admin/notes'
     },
     {
-      id: 9,
+      id: 10,
       title: 'Trend Analysis',
       description: 'Data-driven insights on question patterns and emerging trends in UPSC Prelims.',
       image: 'https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg?auto=compress&cs=tinysrgb&w=800',
